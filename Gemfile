@@ -58,3 +58,5 @@ gem "webpacker", "~> 5.4"
 
 gem "react_on_rails", "12.3.0"
 gem 'mini_racer', platforms: :ruby
+
+gem "devise", "~> 4.8"
