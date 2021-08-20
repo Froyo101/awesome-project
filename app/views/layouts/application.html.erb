@@ -6,10 +6,12 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <% javascript_pack_tag 'core-app' %>
     <%= stylesheet_link_tag 'application', media: 'all' %>
   </head>
 
   <body>
     <%= yield %>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   </body>
 </html>
