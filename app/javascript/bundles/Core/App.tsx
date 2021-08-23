@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, Switch, Route} from 'react-router-dom';
 
 import HeadBar from './components/HeadBar';
+import Home from './components/Home';
 
 const App: React.FunctionComponent = (props, railsContext) => {
   const store = ReactOnRails.getStore('CoreAppStore', false);
