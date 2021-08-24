@@ -42,8 +42,8 @@ ReactOnRails.configure do |config|
   # React components.
   #
   config.prerender = true
-  config.server_bundle_js_file = "hello-world-bundle.js"
+  config.server_bundle_js_file = "server-bundle.js"
 
   # Enables SSR by using same bundle for client and server rendering
-  config.same_bundle_for_client_and_server = true
+  #config.same_bundle_for_client_and_server = true
 end

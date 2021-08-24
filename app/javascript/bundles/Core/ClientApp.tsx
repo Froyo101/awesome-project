@@ -5,8 +5,9 @@ import { BrowserRouter, Switch, Route} from 'react-router-dom';
 
 import HeadBar from './components/HeadBar';
 import Home from './components/Home';
+import Signup from './components/Signup';
 
-const App: React.FunctionComponent = (props, railsContext) => {
+const ClientApp: React.FunctionComponent = (_props, _railsContext) => {
   const store = ReactOnRails.getStore('CoreAppStore', false);
 
   return (
@@ -14,11 +15,12 @@ const App: React.FunctionComponent = (props, railsContext) => {
       <BrowserRouter>
         <HeadBar />
         <Switch>
-          <Route path="/" exact component={Home} />
+          <Route exact path="/" component={Home} />
+          <Route path="/signup" component={Signup} />
         </Switch>
       </BrowserRouter>
     </Provider>
   );
 };
 
-export default App;
+export default ClientApp;
