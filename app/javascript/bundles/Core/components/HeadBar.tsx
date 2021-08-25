@@ -11,6 +11,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import { NavLink as Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,6 +61,9 @@ const HeadBar: React.FunctionComponent = (props) => {
           <Typography variant="h6" className={classes.title}>
             AwesomeProject
           </Typography>
+          <Link exact to="/app/test" activeClassName="active">
+            Test
+          </Link>
           {auth && (
             <div>
               <IconButton

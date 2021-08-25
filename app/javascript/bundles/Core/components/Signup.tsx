@@ -34,7 +34,7 @@ export default class Signup extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    /*this.state = {
       first_name: "",
       last_name: "",
       username: "",
@@ -42,7 +42,7 @@ export default class Signup extends React.Component {
       password: "",
       password_confirmation: "",
       signupErrors: "",
-    };
+    };*/
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }

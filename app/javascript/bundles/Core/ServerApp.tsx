@@ -7,6 +7,7 @@ import { Switch, Route} from 'react-router-dom';
 import HeadBar from './components/HeadBar';
 import Home from './components/Home';
 import Signup from './components/Signup';
+import Test from './components/Test';
 
 // TODO - DO NOT REPEAT YOURSELF!!! Separate switch/route implemenation from Client/Server containers!
 // Also, prob should properly type this at some point
@@ -21,20 +22,22 @@ const ServerApp: any = (_props, railsContext) => {
   }
 
   const { location } = railsContext;
+  console.log("Location: " + railsContext.location);
   const context = {};
 
-  return (
+  return () => (
     <Provider store={store}>
       <StaticRouter location={location} context={context}>
         <HeadBar />
         <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/signup" component={Signup} />
+          <Route exact path="/app" component={Home} />
+          <Route exact path="/app/signup" component={Signup} />
+          <Route exact path="/app/test" component={Test} />
         </Switch>
       </StaticRouter>
     </Provider>
   );
 };
 
-//export default ServerApp; // If using this, need to return () => () in ServerApp
-export default (props) => <ServerApp {...props} />;
+export default ServerApp; // If using this, need to return () => () in ServerApp
+//export default (props) => <ServerApp {...props} />;
