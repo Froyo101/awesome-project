@@ -11,14 +11,14 @@ import railsContextReducer, { railsContextInitialState } from './reducers/RailsC
 const coreAppStore = (props, railsContext) => {
   //const initialProps = props;
   const combinedState = {
-    authStore: authInitialState,
+    authReducer: authInitialState,
     railsContext,
     routing: null,
   };
 
   const combinedReducer = combineReducers({
     authReducer,
-    railsContextReducer,
+    railsContext: railsContextReducer,
     routing: routerReducer,
   });
 

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import ReactOnRails from 'react-on-rails';
 import { Provider } from 'react-redux';
-import { StaticRouter, Switch, Route} from 'react-router-dom';
+import { StaticRouter } from 'react-router'; 
+import { Switch, Route} from 'react-router-dom';
 
 import HeadBar from './components/HeadBar';
 import Home from './components/Home';
@@ -28,11 +29,12 @@ const ServerApp: any = (_props, railsContext) => {
         <HeadBar />
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/signup" component={Signup} />
+          <Route exact path="/signup" component={Signup} />
         </Switch>
       </StaticRouter>
     </Provider>
   );
 };
 
-export default ServerApp;
+//export default ServerApp; // If using this, need to return () => () in ServerApp
+export default (props) => <ServerApp {...props} />;

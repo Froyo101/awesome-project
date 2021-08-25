@@ -6,8 +6,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_pack_tag 'core-app', media: 'all' %>
-    <%= javascript_pack_tag 'core-app', defer: true %>
+    <%= stylesheet_packs_with_chunks_tag 'server-bundle', media: 'all' %>
+    <%= javascript_packs_with_chunks_tag 'server-bundle', defer: true %>
     <%# stylesheet_link_tag 'application', media: 'all' %>
   </head>
 
