@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default class Signup extends React.Component {
-  constructor(props) {
+const Signup: React.FunctionComponent = (props) => {
+  /*constructor(props) {
     super(props);
 
     /*this.state = {
@@ -42,18 +42,18 @@ export default class Signup extends React.Component {
       password: "",
       password_confirmation: "",
       signupErrors: "",
-    };*/
+    };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit = (event) => {
+  }*/
+  
+  const handleSubmit = (event) => {
     event.preventDefault();
     console.log(event);
     return;
   }
 
-  render() {
+  //render() {
     const classes = useStyles();
 
     return (
@@ -66,7 +66,7 @@ export default class Signup extends React.Component {
           <Typography component="h1" variant="h5">
             Sign Up
           </Typography>
-          <form className={classes.form} onSubmit={this.handleSubmit}>
+          <form className={classes.form} onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -148,5 +148,7 @@ export default class Signup extends React.Component {
         </div>
       </Container>
     );
-  }
+  //}
 }
+
+export default Signup;

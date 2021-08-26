@@ -2,7 +2,7 @@ import * as React from 'react';
 import ReactOnRails from 'react-on-rails';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router'; 
-import { Switch, Route} from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 
 import HeadBar from './components/HeadBar';
 import Home from './components/Home';
@@ -30,9 +30,9 @@ const ServerApp: any = (_props, railsContext) => {
       <StaticRouter location={location} context={context}>
         <HeadBar />
         <Switch>
-          <Route exact path="/app" component={Home} />
-          <Route exact path="/app/signup" component={Signup} />
-          <Route exact path="/app/test" component={Test} />
+          <Route exact path="/app" component={withRouter(Home)} />
+          <Route exact path="/app/signup" component={withRouter(Signup)} />
+          <Route exact path="/app/test" component={withRouter(Test)} />
         </Switch>
       </StaticRouter>
     </Provider>
