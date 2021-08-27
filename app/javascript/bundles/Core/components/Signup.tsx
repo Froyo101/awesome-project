@@ -30,11 +30,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Signup: React.FunctionComponent = (props) => {
-  /*constructor(props) {
+const Signup: React.FunctionComponent = (_props) => {
+//export default class Signup extends React.Component {
+  /*constructor(props, _railsContext) {
     super(props);
 
-    /*this.state = {
+    this.state = {
       first_name: "",
       last_name: "",
       username: "",
@@ -152,3 +153,4 @@ const Signup: React.FunctionComponent = (props) => {
 }
 
 export default Signup;
+//export default (_props, _railsContext) => <Signup />

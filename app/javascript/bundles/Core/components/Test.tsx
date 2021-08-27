@@ -16,3 +16,23 @@ const Test: React.FunctionComponent = (props) => {
 };
 
 export default Test;
+
+export class TestClass extends React.Component<{}, { testState: string }> {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      testState: "Hello world!",
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Test Class</h1>
+        <p>{this.state.testState}</p>
+        <a href="/app">Home</a>
+      </div>
+    );
+  }
+}
