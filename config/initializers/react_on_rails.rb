@@ -41,9 +41,11 @@ ReactOnRails.configure do |config|
   # different. You should have ONE server bundle which can create all of your server rendered
   # React components.
   #
-  config.prerender = true
-  config.same_bundle_for_client_and_server = true
-  config.server_bundle_js_file = "server-bundle.js"
+  
+  # SSR SETTINGS
+  config.prerender = false
+  #config.same_bundle_for_client_and_server = true
+  #config.server_bundle_js_file = "server-bundle.js"
 
   # Enables SSR by using same bundle for client and server rendering
   #config.same_bundle_for_client_and_server = true
