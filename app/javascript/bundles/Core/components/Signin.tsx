@@ -3,12 +3,28 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
+import { NavLink as Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as AuthActions from '../state/actions/AuthActions';
+
+const mapStateToProps = (state) => {
+  return {authStore: state.authReducer};
+};
+
+/*const mapDispatchToProps = (dispatch) => {
+  return {
+    attemptLogin: () => {
+      dispatch(AuthActions.attemptLogin);
+    },
+  };
+};*/
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -30,18 +46,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Signin: React.FunctionComponent = (_props) => {
+interface myProps {
+  authStore: {
+    loggedIn: boolean;
+  };
+  attemptLogin: () => void;
+}
+
+//Need to properly type!
+const Signin: React.FunctionComponent<any> = (props: any) => {
+  const actions = bindActionCreators(AuthActions, props.dispatch);
+  const classes = useStyles();
+  
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(event);
+    actions.attemptLogin();
     return;
   }
-
-  const classes = useStyles();
 
   return (
     <Container component = "main" maxWidth="xs">
       <CssBaseline />
+      <h1>Testing</h1>
+      <h1>{"loggedIn " + props.authStore.loggedIn}</h1>
+      <h2>{"Email: " + email + " Password: " + password}</h2>
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -60,6 +92,8 @@ const Signin: React.FunctionComponent = (_props) => {
                 fullWidth
                 id="email"
                 label="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -70,6 +104,8 @@ const Signin: React.FunctionComponent = (_props) => {
                 fullWidth
                 id="password"
                 label="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -78,7 +114,7 @@ const Signin: React.FunctionComponent = (_props) => {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link to="/app/signup"> 
                 Don't have an account with us yet? Sign up!
               </Link>
             </Grid>
@@ -89,4 +125,4 @@ const Signin: React.FunctionComponent = (_props) => {
   );
 }
 
-export default Signin;
+export default connect(mapStateToProps)(Signin);

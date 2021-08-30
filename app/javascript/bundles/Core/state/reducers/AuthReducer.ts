@@ -6,8 +6,10 @@ export const authInitialState = {
 
 // TODO - Make an action interface!
 const authReducer = (state = authInitialState, action: any) => {
+  console.log("In authReducer");
   switch (action.type) {
     case authActionTypes.LOGIN:
+      console.log(Object.assign({}, state, {loggedIn: true}));
       return Object.assign({}, state, {
         loggedIn: true,
       });
