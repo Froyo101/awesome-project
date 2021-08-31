@@ -1,4 +1,10 @@
 import * as React from 'react';
+import axios from 'axios';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as AuthActions from '../state/actions/AuthActions';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,21 +16,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as AuthActions from '../state/actions/AuthActions';
-
 const mapStateToProps = (state) => {
   return {authStore: state.authReducer};
 };
-
-/*const mapDispatchToProps = (dispatch) => {
-  return {
-    attemptLogin: () => {
-      dispatch(AuthActions.attemptLogin);
-    },
-  };
-};*/
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -63,9 +57,24 @@ const Signin: React.FunctionComponent<any> = (props: any) => {
   
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event);
-    actions.attemptLogin();
-    return;
+    axios.post("http://localhost:3000/sessions", {
+      user: {
+        email: email,
+        password: password,
+      }
+    },
+    { withCredentials: true })
+    .then(response => {
+      console.log("login res", response);
+      if (response.data.status === "created"){
+        actions.successfulLogin(response.data.user);
+        props.history.push("/app/dashboard");
+      }
+    })
+    .catch(error => {
+      console.log("login error", error);
+      actions.failedLogin(error);
+    });
   }
 
   return (
@@ -94,6 +103,7 @@ const Signin: React.FunctionComponent<any> = (props: any) => {
                 label="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoFocus
               />
             </Grid>
             <Grid item xs={12}>

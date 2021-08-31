@@ -16,9 +16,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-let token = document.getElementsByName('csrf-token')[0].getAttribute('content');
-axios.defaults.headers.common['X-CSRF-Token'] = token;
-axios.defaults.headers.common['Accept'] = 'application/json';
+//let token = document.getElementsByName('csrf-token')[0].getAttribute('content');
+//axios.defaults.headers.common['X-CSRF-Token'] = token;
+//axios.defaults.headers.common['Accept'] = 'application/json';
 
 const mapStateToProps = (state) => {
   return {authStore: state.authReducer};
@@ -48,14 +48,22 @@ const Signup: React.FunctionComponent<any> = (props: any) => {
   const actions = bindActionCreators(AuthActions, props.dispatch);
   const classes = useStyles();
   
+  const [fname, setFname] = React.useState("");
+  const [lname, setLname] = React.useState("");
+  const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [passwordConfirmation, setPasswordConfirmation] = React.useState("");
+
+  
   
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post("http://localhost:3000/users", {
+    axios.post("http://localhost:3000/registrations", {
       user: {
+        f_name: fname,
+        l_name: lname,
+        username: username,
         email: email,
         password: password,
         password_confirmation: passwordConfirmation,
@@ -64,11 +72,15 @@ const Signup: React.FunctionComponent<any> = (props: any) => {
     { withCredentials: true })
     .then(response => {
       console.log("registration res", response);
+      if (response.data.status === "created") {
+        actions.successfulLogin(response.data.user);
+        props.history.push("/app/dashboard");
+      }
     })
     .catch(error => {
-      console.log("registration errror", error);
+      console.log("registration error", error);
+      actions.failedLogin(error);
     });
-    return;
   }
 
   return (
@@ -92,6 +104,8 @@ const Signup: React.FunctionComponent<any> = (props: any) => {
                 fullWidth
                 id="firstName"
                 label="First Name"
+                value={fname}
+                onChange={(e) => setFname(e.target.value)}
                 autoFocus
               />
             </Grid>
@@ -104,6 +118,8 @@ const Signup: React.FunctionComponent<any> = (props: any) => {
                 fullWidth
                 id="lastName"
                 label="Last Name"
+                value={lname}
+                onChange={(e) => setLname(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -115,6 +131,8 @@ const Signup: React.FunctionComponent<any> = (props: any) => {
                 fullWidth
                 id="username"
                 label="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>

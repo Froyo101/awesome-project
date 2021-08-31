@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :sessions, only: [:create]
+  resources :registrations, only: [:create]
+  delete :logout, to: "sessions#logout"
+  get :logged_in, to: "sessions#logged_in"
+  
   get 'hello_world', to: 'hello_world#index'
   root to: 'application#index'
   get "app(/*all)", to: "application#index"
