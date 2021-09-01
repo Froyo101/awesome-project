@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { mapStateToPropsAuth } from './state/StateToProps';
 import * as AuthActions from './state/actions/AuthActions';
 import { Switch, Route, withRouter } from 'react-router-dom';
 
@@ -12,12 +13,6 @@ import Dashboard from './components/Dashboard';
 import Signin from './components/Signin';
 import Signup from './components/Signup';
 import Test, {TestClass} from './components/Test';
-
-const mapStateToProps = (state) => {
-  return {
-    authStore: state.authReducer,
-  };
-};
 
 //const AppContent: React.FunctionComponent = (props: any) => {
 class AppContent extends React.Component<any, any> {
@@ -31,16 +26,16 @@ class AppContent extends React.Component<any, any> {
 
   checkAuthStatus = () => {
     axios.get("http://localhost:3000/logged_in", { withCredentials: true })
-    .then(response => {
+    .then((response) => {
       console.log("authorized? response", response);
       if (response.data.logged_in && !this.props.authStore.loggedIn) {
         this.actions.stillAuthorized(response.data.user);
       }
       else if (!response.data.logged_in && this.props.authStore.loggedIn) {
-        this.actions.attemptLogout;
+        this.actions.logout;
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log("authorized? error", error);
       this.actions.failedLogin(error);
     });
@@ -71,4 +66,4 @@ class AppContent extends React.Component<any, any> {
   }
 }
 
-export default connect(mapStateToProps)(AppContent);
+export default connect(mapStateToPropsAuth)(AppContent);

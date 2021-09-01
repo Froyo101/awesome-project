@@ -1,30 +1,28 @@
-import * as React from 'react';
-import axios from 'axios';
+import * as React from "react";
+import axios from "axios";
 
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom'
+import { connect } from "react-redux";
+import { mapStateToPropsAuth } from "../state/StateToProps";
+import { Redirect } from "react-router-dom";
 
 const mapStateToProps = (state) => {
   return {
     authStore: state.authReducer,
-  }
-}
+  };
+};
 
 const Dashboard: React.FunctionComponent = (props: any) => {
-  const authed = false;
+  const user = props.authStore.user;
 
-  if (authed) {
+  if (props.authStore.loggedIn) {
     return (
       <div>
         <h1>Dashboard</h1>
-        <p>Welcome back, {props.authStore.username} </p>
+        <p>Welcome back, {user.username}</p>
       </div>
     );
-  }
-  else {
-    return (
-      <Redirect push to="/app/signin" /> 
-    );
+  } else {
+    return <Redirect push to="/app/signin" />;
   }
 };
 

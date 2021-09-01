@@ -1,17 +1,21 @@
-import * as React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import { NavLink as Link } from 'react-router-dom';
+import * as React from "react";
+import axios from "axios";
+
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { mapStateToPropsAuth } from "../state/StateToProps";
+import * as AuthActions from "../state/actions/AuthActions";
+
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import { NavLink as Link, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,15 +31,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const HeadBar: React.FunctionComponent = (props) => {
+const HeadBar: React.FunctionComponent<any> = (props: any) => {
+  const actions = bindActionCreators(AuthActions, props.dispatch);
+
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAuth(event.target.checked);
-  };
+  const history = useHistory();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -45,17 +48,31 @@ const HeadBar: React.FunctionComponent = (props) => {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    axios
+      .delete("http://localhost:3000/logout", { withCredentials: true })
+      .then((response) => {
+        console.log("Logout res", response);
+        if (!response.data.logged_in) {
+          actions.logout();
+          history.push("/app/home");
+        }
+      })
+      .catch((error) => {
+        console.log("Logout error", error);
+      });
+  };
+
   return (
     <div className={classes.root}>
-      <FormGroup>
-        <FormControlLabel
-          control={<Switch checked={auth} onChange={handleChange} aria-label="login switch" />}
-          label={auth ? 'Logout' : 'Login'}
-        />
-      </FormGroup>
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
@@ -64,7 +81,7 @@ const HeadBar: React.FunctionComponent = (props) => {
           <Link exact to="/app/test" activeClassName="active">
             Test
           </Link>
-          {auth && (
+          {props.authStore.loggedIn == true && (
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -79,19 +96,20 @@ const HeadBar: React.FunctionComponent = (props) => {
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: "top",
+                  horizontal: "right",
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: "top",
+                  horizontal: "right",
                 }}
                 open={open}
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleLogout}>Sign out</MenuItem>
               </Menu>
             </div>
           )}
@@ -101,4 +119,4 @@ const HeadBar: React.FunctionComponent = (props) => {
   );
 };
 
-export default HeadBar;
+export default connect(mapStateToPropsAuth)(HeadBar);

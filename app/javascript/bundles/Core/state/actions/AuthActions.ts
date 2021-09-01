@@ -24,7 +24,8 @@ export function stillAuthorized(user) {
   }
 }
 
-export function attemptLogout() {
+export function logout() {
+  console.log("Loggin out");
   return {
     type: authActionTypes.LOGOUT,
   };
