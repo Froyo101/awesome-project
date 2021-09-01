@@ -19,7 +19,7 @@ export function failedLogin(error) {
 export function stillAuthorized(user) {
   console.log("User still authorized");
   return {
-    types: authActionTypes.STILL_AUTHORIZED,
+    type: authActionTypes.STILL_AUTHORIZED,
     user: user,
   }
 }
