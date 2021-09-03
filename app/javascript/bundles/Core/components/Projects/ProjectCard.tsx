@@ -11,7 +11,7 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles({
   root: {
     width: "50%",
-    margin: "auto",
+    margin: "5px auto 5px auto",
   },
   bullet: {
     display: "inline-block",
@@ -26,24 +26,24 @@ const useStyles = makeStyles({
   },
 });
 
-const ListCard: React.FunctionComponent<any> = (props: any) => {
+const ProjectCard: React.FunctionComponent<any> = (props: any) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
       <CardContent>
         <Typography variant="h5" component="h2">
-          Step Title (Optional?)
+          {props.title}
         </Typography>
         <Typography variant="body2" component="p">
-          Bottom text.
+          {props.body}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Interact with me!</Button>
+        <Button size="small">Expand</Button>
       </CardActions>
     </Card>
   );
 };
 
-export default ListCard;
+export default ProjectCard;

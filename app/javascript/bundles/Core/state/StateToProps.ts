@@ -3,3 +3,10 @@ export function mapStateToPropsAuth(state) {
     authStore: state.authReducer,
   };
 }
+
+export function mapStateToPropsProject(state) {
+  return {
+    authStore: state.authReducer,
+    projectStore: state.projectReducer,
+  }
+}

@@ -6,6 +6,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ProjectCard from "./ProjectCard";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,30 +21,35 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     details: {
       display: "block",
-    }
+    },
   })
 );
 
-const ListBucket: React.FunctionComponent<any> = (props: any) => {
+const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
   const classes = useStyles();
 
   return (
     <Accordion className={classes.root}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
-        aria-controls={"accordion" + props.id + "-content"}
-        id={"accordion" + props.id + "-header"}
+        aria-controls={"bucket-" + props.id + "-content"}
+        id={"bucket-" + props.id + "-header"}
       >
         <Typography className={classes.heading}>{props.title}</Typography>
       </AccordionSummary>
       <AccordionDetails className={classes.details}>
-        <Typography>
-          This is the head of a new bucket.
-        </Typography>
-        {props.children}
+        <Typography>This is the head of a new bucket.</Typography>
+        {props.cards.map((card) => (
+          <ProjectCard
+            id={props.title + "-card-" + card.id}
+            key={card.id}
+            title={card.title}
+            body={card.body}
+          />
+        ))}
       </AccordionDetails>
     </Accordion>
   );
 };
 
-export default ListBucket;
+export default ProjectBucket;

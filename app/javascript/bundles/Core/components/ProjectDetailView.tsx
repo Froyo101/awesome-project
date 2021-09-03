@@ -3,13 +3,16 @@ import axios from "axios";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-
+import * as AuthActions from "../state/actions/AuthActions";
+import * as ProjectActions from "../state/actions/ProjectActions";
+import { mapStateToPropsProject } from "../state/StateToProps";
 
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
-import ListBucket from "./Projects/ListBucket";
-import ListCard from "./Projects/ListCard";
+import ProjectBucket from "./Projects/ProjectBucket";
+import ProjectCard from "./Projects/ProjectCard";
 import { makeStyles } from "@material-ui/core";
+import { CssBaseline } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -21,19 +24,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
-  //const actions = bindActionCreators(ProjectActions, props.dispatch)
+  const actions = bindActionCreators(
+    { ...AuthActions, ...ProjectActions },
+    props.dispatch
+  );
   const classes = useStyles();
 
-  return (
-    <Container component="main">
-      <Paper className={classes.paper}>
-        <ListBucket id={0} title={"Test Bucket 0"}>
-          <ListCard />
-          <ListCard />
-        </ListBucket>
-      </Paper>
-    </Container>
-  );
-}
+  if (props.projectStore.projectLoaded)
+    return (
+      <Container component="main">
+        <CssBaseline />
+        <Paper className={classes.paper}>
+          <h1>{props.projectStore.title} by {props.projectStore.owner}</h1>
+          <p>Shared with: {props.projectStore.sharedWith.join(", ")}</p>
+          {props.projectStore.content.map((bucket) => (
+            <ProjectBucket
+              id={"bucket-" + bucket.id}
+              key={bucket.id}
+              title={bucket.title}
+              cards={bucket.cards}
+            />
+          ))}
+        </Paper>
+      </Container>
+    );
+  else return <h1>Project Loading</h1>;
+};
 
-export default ProjectDetailView;
+export default connect(mapStateToPropsProject)(ProjectDetailView);
