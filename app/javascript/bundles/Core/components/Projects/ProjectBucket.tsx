@@ -7,6 +7,7 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ProjectCard from "./ProjectCard";
+import AddElementButton from "./AddElementButton";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,6 +48,7 @@ const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
             body={card.body}
           />
         ))}
+        <AddElementButton type="card" />
       </AccordionDetails>
     </Accordion>
   );

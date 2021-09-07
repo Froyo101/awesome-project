@@ -13,17 +13,6 @@ const useStyles = makeStyles({
     width: "50%",
     margin: "5px auto 5px auto",
   },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
 });
 
 const ProjectCard: React.FunctionComponent<any> = (props: any) => {

@@ -13,9 +13,11 @@ import ProjectBucket from "./Projects/ProjectBucket";
 import ProjectCard from "./Projects/ProjectCard";
 import { makeStyles } from "@material-ui/core";
 import { CssBaseline } from "@material-ui/core";
+import AddElementButton from "./Projects/AddElementButton";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    backgroundColor: "grey",
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
@@ -45,6 +47,7 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
               cards={bucket.cards}
             />
           ))}
+          <AddElementButton type="bucket" />
         </Paper>
       </Container>
     );

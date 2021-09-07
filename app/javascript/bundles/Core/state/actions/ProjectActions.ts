@@ -6,3 +6,10 @@ export function loadProject(project) {
     project: project,
   };
 }
+
+export function addBucket(data) {
+  return {
+    type: projectActionTypes.ADD_BUCKET,
+    data: data,
+  }
+}

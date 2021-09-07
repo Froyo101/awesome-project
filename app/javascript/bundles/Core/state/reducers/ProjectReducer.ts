@@ -57,8 +57,11 @@ export const projectInitialState = {
   ],
 };
 
+//Need a function for retrieving last bucket id from a list that's loaded in
+let curID = 2;
+
 const projectReducer = (state = projectInitialState, action) => {
-  const newState = { ...state };
+  let newState = { ...state };
 
   switch (action.type) {
     case projectActionTypes.LOAD_PROJECT:
@@ -66,9 +69,24 @@ const projectReducer = (state = projectInitialState, action) => {
         projectLoaded: true,
         ...action.project,
       });
+    case projectActionTypes.ADD_CARD:
+      const newCard = {
+
+      }
+    case projectActionTypes.ADD_BUCKET:
+      const newBucket = {
+        id: curID + 1,
+        title: action.data,
+        cards: [],
+      }
+      curID++;
+      newState.content.push(newBucket);
+      return newState;
     default:
       return newState;
   }
 };
 
 export default projectReducer;
+
+//UPDATE BUCKETS TO CONTAIN A HEADER FIELD TO PASS DOWN!
