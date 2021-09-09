@@ -13,3 +13,10 @@ export function addBucket(data) {
     data: data,
   }
 }
+
+export function addCard(data) {
+  return {
+    type: projectActionTypes.ADD_CARD,
+    data: data,
+  }
+}

@@ -14,15 +14,15 @@ const useStyles = makeStyles((theme: Theme) =>
     rootButton: {
       display: "flex",
       alignItems: "center",
-      padding: "5px",
-      border: "3px dashed grey",
+      padding: "4px",
+      border: "4px dashed grey",
       borderRadius: "8px",
       cursor: "pointer",
     },
     newCard: {
       width: "50%",
       minHeight: "80px",
-      margin: "5px auto 5px auto",
+      margin: "4px auto 4px auto",
     },
     textArea: {
       width: "100%",
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
     newElementButtonGroup: {
       marginTop: "8px",
       width: "50%",
-      margin: "5px auto 5px auto",
+      margin: "4px auto 4px auto",
       display: "flex",
       alignItems: "center",
     },
@@ -68,6 +68,8 @@ const AddElementButton: React.FunctionComponent<any> = (props: any) => {
     switch (type) {
       case "bucket":
         actions.addBucket(newElementText);
+      case "card":
+        actions.addCard({ title: newElementText, bucketID: props.bucketID });
     }
   };
 
