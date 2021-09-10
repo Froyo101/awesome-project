@@ -5,25 +5,38 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as AuthActions from "../state/actions/AuthActions";
 import * as ProjectActions from "../state/actions/ProjectActions";
-import { mapStateToPropsProject } from "../state/StateToProps";
+import { mapStateToPropsProjectAuth } from "../state/StateToProps";
 
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import ProjectBucket from "./Projects/ProjectBucket";
-import { makeStyles } from "@material-ui/core";
+import { Theme, createStyles, makeStyles } from "@material-ui/core";
 import { CssBaseline } from "@material-ui/core";
 import AddElementButton from "./Projects/AddElementButton";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { Box } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    backgroundColor: "grey",
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-}));
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      width: "100vw",
+    },
+    paper: {
+      backgroundColor: "#515E63",
+      marginTop: theme.spacing(8),
+      marginBottom: theme.spacing(8),
+      marginLeft: "auto",
+      marginRight: "auto",
+      minWidth: "75vw",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    bucketDroppable: {
+      width: "100%",
+    },
+  })
+);
 
 const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
   const actions = bindActionCreators(
@@ -33,12 +46,77 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
   const classes = useStyles();
 
   const onDragEnd = (result) => {
+    const { source, destination, draggableId, type } = result;
 
-  }
+    if (!destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    if (type === "bucket") {
+      const newBucketOrder = Array.from(props.projectStore.content);
+      const currentBucket = newBucketOrder.splice(source.index, 1);
+      newBucketOrder.splice(destination.index, 0, ...currentBucket);
+
+      //console.log(newBucketOrder);
+
+      actions.dndBucket(newBucketOrder);
+      return;
+    }
+
+    if (type === "card") {
+      const newCardOrder: any = Array.from(props.projectStore.content);
+
+      if (source.droppableId === destination.droppableId) {
+        const bucketId = source.droppableId.match(/\d+/);
+        console.log("Same bucket: ", bucketId);
+
+        for (const bucket of newCardOrder) {
+          if (bucket.id === parseInt(bucketId[0])) {
+            const currentCard = bucket.cards.splice(source.index, 1);
+            bucket.cards.splice(destination.index, 0, ...currentCard);
+
+            actions.dndCard(newCardOrder);
+            break;
+          }
+        }
+
+        return;
+      }
+
+      const sourceId = source.droppableId.match(/\d+/);
+      const destinationId = destination.droppableId.match(/\d+/);
+      console.log("Diff bucket: ", sourceId, destinationId);
+      let currentCard;
+
+      for (const bucket of newCardOrder) {
+        if (bucket.id === parseInt(sourceId[0])) {
+          currentCard = bucket.cards.splice(source.index, 1);
+          break;
+        }
+      }
+
+      for (const bucket of newCardOrder) {
+        if (bucket.id === parseInt(destinationId[0])) {
+          if (currentCard)
+            bucket.cards.splice(destination.index, 0, ...currentCard);
+          
+          actions.dndCard(newCardOrder);
+          return;
+        }
+      }
+    }
+  };
 
   if (props.projectStore.projectLoaded)
     return (
-      <Container component="main">
+      <Container className={classes.root} component="main">
         <CssBaseline />
         <DragDropContext onDragEnd={onDragEnd}>
           <Paper className={classes.paper}>
@@ -46,13 +124,25 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
               {props.projectStore.title} by {props.projectStore.owner}
             </h1>
             <p>Shared with: {props.projectStore.sharedWith.join(", ")}</p>
-            {props.projectStore.content.map((bucket) => (
-              <ProjectBucket
-                key={"bucket-" + bucket.id}
-                bucket={bucket}
-                cards={bucket.cards}
-              />
-            ))}
+            <Droppable
+              className={classes.bucketDroppable}
+              droppableId={"project-board"}
+              type="bucket"
+            >
+              {(provided) => (
+                <Box ref={provided.innerRef} {...provided.droppableProps}>
+                  {props.projectStore.content.map((bucket, index) => (
+                    <ProjectBucket
+                      key={"bucket-" + bucket.id}
+                      bucket={bucket}
+                      cards={bucket.cards}
+                      index={index}
+                    />
+                  ))}
+                  {provided.placeholder}
+                </Box>
+              )}
+            </Droppable>
             <AddElementButton type="bucket" />
           </Paper>
         </DragDropContext>
@@ -61,4 +151,4 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
   else return <h1>Project Loading</h1>;
 };
 
-export default connect(mapStateToPropsProject)(ProjectDetailView);
+export default connect(mapStateToPropsProjectAuth)(ProjectDetailView);

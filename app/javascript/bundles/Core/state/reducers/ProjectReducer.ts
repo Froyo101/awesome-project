@@ -9,6 +9,7 @@ export const projectInitialState = {
     {
       id: 0,
       title: "Sample Bucket 0",
+      expanded: true,
       cards: [
         {
           id: 0,
@@ -25,6 +26,7 @@ export const projectInitialState = {
     {
       id: 1,
       title: "Sample Bucket 1",
+      expanded: false,
       cards: [
         {
           id: 2,
@@ -41,6 +43,7 @@ export const projectInitialState = {
     {
       id: 2,
       title: "Sample Bucket 2",
+      expanded: false,
       cards: [
         {
           id: 4,
@@ -62,6 +65,8 @@ let curBucketID = 2;
 let curCardID = 5;
 
 const projectReducer = (state = projectInitialState, action) => {
+  console.log("In project reducer");
+  
   let newState = { ...state };
 
   switch (action.type) {
@@ -95,11 +100,29 @@ const projectReducer = (state = projectInitialState, action) => {
       const newBucket = {
         id: curBucketID + 1,
         title: action.data,
+        expanded: true,
         cards: [],
       };
       curBucketID++;
       newState.content.push(newBucket);
       return newState;
+    case projectActionTypes.BUCKET_EXPANSION:
+      const newContentExpansion = newState.content.map((bucket) => {
+        if (bucket.id === action.data) {
+          return {
+            ...bucket,
+            expanded: !bucket.expanded,
+          };
+        } else {
+          return bucket;
+        }
+      });
+      
+      return Object.assign({}, newState, { content: newContentExpansion });
+    case projectActionTypes.DND_BUCKET:
+      return Object.assign({}, newState, { content: action.content });
+    case projectActionTypes.DND_CARD:
+      return Object.assign({}, newState, { content: action.content });
     default:
       return newState;
   }

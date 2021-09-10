@@ -11,8 +11,10 @@ import { Draggable } from "react-beautiful-dnd";
 
 const useStyles = makeStyles({
   root: {
-    width: "50%",
-    margin: "4px auto 4px auto",
+    width: "100%",
+    minWidth: "60vw",
+    margin: "8px auto 8px auto",
+    //backgroundColor: "#D4ECDD"
   },
 });
 
@@ -31,7 +33,7 @@ const ProjectCard: React.FunctionComponent<any> = (props: any) => {
             <Typography
               {...provided.dragHandleProps}
               variant="h5"
-              component="h2"
+              component="h3"
             >
               {props.card.title}
             </Typography>

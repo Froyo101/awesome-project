@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { connect } from "react-redux";
-import { bindActionCreators } from "@reduxjs/toolkit";
+import { bindActionCreators } from "redux";
 import * as projectActions from "../../state/actions/ProjectActions";
 
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
@@ -13,16 +13,24 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     rootButton: {
       display: "flex",
+      flexDirection: "column",
       alignItems: "center",
+      minWidth: "55vw",
+      margin: "8px auto 0px auto",
       padding: "4px",
-      border: "4px dashed grey",
+      border: "3px dashed lightgrey",
       borderRadius: "8px",
       cursor: "pointer",
     },
+    innerButton: {
+      display: "flex",
+      alignItems: "center",
+    },
     newCard: {
-      width: "50%",
+      width: "100%",
+      minWidth: "60vw",
       minHeight: "80px",
-      margin: "4px auto 4px auto",
+      margin: "6px auto 8px auto",
     },
     textArea: {
       width: "100%",
@@ -32,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     newElementButtonGroup: {
       marginTop: "8px",
-      width: "50%",
+      width: "100%",
       margin: "4px auto 4px auto",
       display: "flex",
       alignItems: "center",
@@ -80,8 +88,10 @@ const AddElementButton: React.FunctionComponent<any> = (props: any) => {
           className={classes.rootButton}
           onClick={() => setNewElementMode(true)}
         >
+          <Box className={classes.innerButton}> 
           <AddCircleOutlineOutlinedIcon />
           <p className={classes.leftSpacing}>Add another {type}</p>
+          </Box>
         </Box>
       );
     } else {
