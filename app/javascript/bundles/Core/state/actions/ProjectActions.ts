@@ -41,3 +41,38 @@ export function dndCard(content) {
     content: content,
   };
 }
+
+export function editCardTitle(data) {
+  return {
+    type: projectActionTypes.EDIT_CARD_TITLE,
+    data: data,
+  };
+}
+
+export function editCardBody(data) {
+  return {
+    type: projectActionTypes.EDIT_CARD_BODY,
+    data: data,
+  };
+}
+
+export function deleteCard(data) {
+  return {
+    type: projectActionTypes.EDIT_CARD_TITLE,
+    data: data,
+  };
+}
+
+export function editBucketTitle(data) {
+  return {
+    type: projectActionTypes.EDIT_BUCKET_TITLE,
+    data: data,
+  };
+}
+
+export function deleteBucket(data) {
+  return {
+    type: projectActionTypes.DELETE_BUCKET,
+    data: data,
+  };
+}

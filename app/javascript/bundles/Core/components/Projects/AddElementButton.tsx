@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     newElementButton: {
       color: "white",
-      backgroundColor: "green",
+      backgroundColor: "#57cc99",
     },
     leftSpacing: {
       marginLeft: "8px",

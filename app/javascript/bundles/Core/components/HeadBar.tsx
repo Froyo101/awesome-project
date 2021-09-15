@@ -21,6 +21,22 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+      backgroundColor: "#57cc99",
+      color: "white",
+    },
+    appBar: {
+    },
+    link: {
+      display: "inline-block",
+      color: "white",
+      textDecoration: "none",
+      padding: "2px",
+      marginRight: "8px",
+      '&:hover': {
+        borderRadius: "4px",
+        backgroundColor: "#c7f9cc", 
+        color: "#38a3a5",
+      },
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -65,20 +81,15 @@ const HeadBar: React.FunctionComponent<any> = (props: any) => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" color="transparent" >
         <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" className={classes.title}>
             AwesomeProject
           </Typography>
-          <Link exact to="/app/test" activeClassName="active">
+          <Link to="/app/home" className={classes.link}>
+            Home
+          </Link>
+          <Link to="/app/test" className={classes.link} activeClassName="active">
             Test
           </Link>
           {props.authStore.loggedIn == true && (

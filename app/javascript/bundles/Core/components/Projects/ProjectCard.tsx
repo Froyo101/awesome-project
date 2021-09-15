@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     width: "100%",
     minWidth: "60vw",
     margin: "8px auto 8px auto",
-    //backgroundColor: "#D4ECDD"
+    backgroundColor: "#E8E8E8",
   },
 });
 

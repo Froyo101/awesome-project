@@ -1,16 +1,39 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Link } from 'react-router-dom';
+import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import { Container, CssBaseline, Box } from "@material-ui/core";
+import { Link } from "react-router-dom";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      color: "black",
+    },
+    mainImageBox: {
+      minHeight: "50vh",
+      minWidth: "100%",
+      backgroundImage: "linear-gradient(red, yellow)",
+      color: "whitesmoke",
+      display: "flex",
+      justifyContent: "center",
+    },
+    awesomeFont: {
+      color: "yellow",
+    }
+  })
+);
 
 const Home: React.FunctionComponent = (props) => {
+  const classes = useStyles();
+
   return (
-    <div>
-      <h1>Home</h1>
-      <Link to="/app/test">
-            Test
-          </Link>
-    </div>
-  ); 
+    <Container>
+      <CssBaseline />
+      <Box className={classes.mainImageBox}>
+        <h1>AwesomeProject will make your projects <span className={classes.awesomeFont}>awesome.</span></h1>
+      </Box>
+    </Container>
+  );
 };
 
 export default Home;
