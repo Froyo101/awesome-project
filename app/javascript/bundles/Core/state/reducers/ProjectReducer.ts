@@ -4,7 +4,7 @@ export const projectInitialState = {
   projectLoaded: true,
   title: "Sample Project",
   owner: "Froyo101",
-  sharedWith: ["jdoe123", "Froyo102"],
+  //sharedWith: ["jdoe123", "Froyo102"],
   content: [
     {
       id: 0,
@@ -70,10 +70,14 @@ const projectReducer = (state = projectInitialState, action) => {
   let newState = { ...state };
 
   switch (action.type) {
-    case projectActionTypes.LOAD_PROJECT:
+    case projectActionTypes.LOAD_PROJECT_SUCCESS:
+      const parsedContent = JSON.parse(action.project.content);
+
       return Object.assign({}, newState, {
         projectLoaded: true,
-        ...action.project,
+        title: action.project.title,
+        owner: action.project.owner,
+        content: parsedContent,
       });
     case projectActionTypes.ADD_CARD:
       const newContent = newState.content.map((bucket) => {

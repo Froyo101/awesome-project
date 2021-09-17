@@ -1,9 +1,15 @@
 import * as projectActionTypes from "../constants/ProjectConstants";
 
-export function loadProject(project) {
+export function loadProjectSuccess(project) {
   return {
-    type: projectActionTypes.LOAD_PROJECT,
+    type: projectActionTypes.LOAD_PROJECT_SUCCESS,
     project: project,
+  };
+}
+
+export function loadProjectError() {
+  return {
+    type: projectActionTypes.LOAD_PROJECT_ERROR,
   };
 }
 

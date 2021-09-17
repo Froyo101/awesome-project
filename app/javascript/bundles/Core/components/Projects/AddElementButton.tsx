@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
       minWidth: "55vw",
       margin: "8px auto 0px auto",
       padding: "4px",
-      border: "3px dashed lightgrey",
+      border: "3px dashed #E8E8E8",
       borderRadius: "8px",
       cursor: "pointer",
     },

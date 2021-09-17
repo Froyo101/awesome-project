@@ -6,6 +6,7 @@ import { bindActionCreators } from "redux";
 import * as AuthActions from "../state/actions/AuthActions";
 import * as ProjectActions from "../state/actions/ProjectActions";
 import { mapStateToPropsProjectAuth } from "../state/StateToProps";
+import { useParams } from "react-router-dom";
 
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
@@ -44,6 +45,21 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
     props.dispatch
   );
   const classes = useStyles();
+  const { id } = useParams();
+
+  const fetchProject = () => {
+    axios.get(`http://localhost:3000/projects/${id}`, { withCredentials: true })
+      .then((response) => {
+        if (response.data.project_loaded) {
+          actions.loadProjectSuccess(response.data.project);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  React.useEffect(() => fetchProject(), []);
 
   const onDragEnd = (result) => {
     const { source, destination, draggableId, type } = result;

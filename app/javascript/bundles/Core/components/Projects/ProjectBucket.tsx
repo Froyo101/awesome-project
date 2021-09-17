@@ -55,6 +55,7 @@ const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
           expanded={props.bucket.expanded}
           ref={provided.innerRef}
           {...provided.draggableProps}
+          TransitionProps={{ unmountOnExit: true }}
         >
           <AccordionSummary
             {...provided.dragHandleProps}
@@ -68,7 +69,6 @@ const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails className={classes.details}>
-            <Typography>This is the head of a new bucket.</Typography>
             <Droppable droppableId={"bucket-" + props.bucket.id + "-droppable"} type="card">
               {(provided) => (
                 <Box ref={provided.innerRef} {...provided.droppableProps}>

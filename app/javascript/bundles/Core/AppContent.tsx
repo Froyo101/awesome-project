@@ -57,7 +57,7 @@ class AppContent extends React.Component<any, any> {
           <Route exact path="/app" component={withRouter(Home)} />
           <Route exact path="/app/home" component={withRouter(Home)} />
           <Route exact path="/app/dashboard" component={withRouter(Dashboard)} />
-          <Route exact path="/app/details" component={withRouter(ProjectDetailView)} />
+          <Route exact path="/app/project/:id" component={withRouter(ProjectDetailView)} />
           <Route exact path="/app/signin" component={withRouter(Signin)} />
           <Route exact path="/app/signup" component={withRouter(Signup)} />
           <Route exact path="/app/test" component={withRouter(Test)} />

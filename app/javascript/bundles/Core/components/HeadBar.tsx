@@ -24,17 +24,16 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: "#57cc99",
       color: "white",
     },
-    appBar: {
-    },
+    appBar: {},
     link: {
       display: "inline-block",
       color: "white",
       textDecoration: "none",
       padding: "2px",
       marginRight: "8px",
-      '&:hover': {
+      "&:hover": {
         borderRadius: "4px",
-        backgroundColor: "#c7f9cc", 
+        backgroundColor: "#c7f9cc",
         color: "#38a3a5",
       },
     },
@@ -81,19 +80,26 @@ const HeadBar: React.FunctionComponent<any> = (props: any) => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="transparent" >
+      <AppBar position="static" color="transparent">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             AwesomeProject
           </Typography>
-          <Link to="/app/home" className={classes.link}>
-            Home
-          </Link>
-          <Link to="/app/test" className={classes.link} activeClassName="active">
-            Test
-          </Link>
+          {props.authStore.loggedIn == false && (
+            <div>
+              <Link to="/app/home" className={classes.link}>
+                Home
+              </Link>
+              <Link to="/app/signin" className={classes.link}>
+                Sign in
+              </Link>
+            </div>
+          )}
           {props.authStore.loggedIn == true && (
             <div>
+              <Link to="/app/dashboard" className={classes.link}>
+                Dashboard
+              </Link>
               <IconButton
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
