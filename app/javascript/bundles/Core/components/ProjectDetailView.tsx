@@ -48,7 +48,8 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
   const { id } = useParams();
 
   const fetchProject = () => {
-    axios.get(`http://localhost:3000/projects/${id}`, { withCredentials: true })
+    axios
+      .get(`http://localhost:3000/projects/${id}`, { withCredentials: true })
       .then((response) => {
         if (response.data.project_loaded) {
           actions.loadProjectSuccess(response.data.project);
@@ -57,7 +58,7 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   React.useEffect(() => fetchProject(), []);
 
@@ -122,7 +123,7 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
         if (bucket.id === parseInt(destinationId[0])) {
           if (currentCard)
             bucket.cards.splice(destination.index, 0, ...currentCard);
-          
+
           actions.dndCard(newCardOrder);
           return;
         }
@@ -164,7 +165,13 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
         </DragDropContext>
       </Container>
     );
-  else return <h1>Project Loading</h1>;
+  else
+    return (
+      <Container>
+        <CssBaseline />
+        <h1>Project Loading...</h1>
+      </Container>
+    );
 };
 
 export default connect(mapStateToPropsProjectAuth)(ProjectDetailView);

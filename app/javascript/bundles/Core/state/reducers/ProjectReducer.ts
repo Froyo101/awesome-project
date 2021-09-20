@@ -1,7 +1,7 @@
 import * as projectActionTypes from "../constants/ProjectConstants";
 
 export const projectInitialState = {
-  projectLoaded: true,
+  projectLoaded: false,
   title: "Sample Project",
   owner: "Froyo101",
   //sharedWith: ["jdoe123", "Froyo102"],
@@ -77,7 +77,7 @@ const projectReducer = (state = projectInitialState, action) => {
         projectLoaded: true,
         title: action.project.title,
         owner: action.project.owner,
-        content: parsedContent,
+        content: action.project.content,
       });
     case projectActionTypes.ADD_CARD:
       const newContent = newState.content.map((bucket) => {

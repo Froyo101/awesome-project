@@ -21,6 +21,7 @@ class ProjectsController < ApplicationController
       render json: {
         status: 500
       }
+    end
   end
 
   def show

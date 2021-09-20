@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   root to: 'application#index'
   get "app(/*all)", to: "application#index"
 
-  post 'projects', to 'projects#create'
+  post 'projects', to: 'projects#create'
   get 'projects/:id', to: 'projects#show'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
