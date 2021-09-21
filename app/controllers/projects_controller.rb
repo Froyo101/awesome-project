@@ -5,17 +5,17 @@ class ProjectsController < ApplicationController
   before_action :correct_user, only: [:update, :destroy]
 
   def create
-    project = @current_user.projects.build(
+    @project = @current_user.projects.create(
       title: params["project"]["title"],
       owner: @current_user.username,
       content: params["project"]["content"],
       public: params["project"]["public"]
     )
 
-    if project.save
+    if @project
       render json: {
         status: :created,
-        project: project,
+        project: @project,
       }
     else
       render json: {
@@ -25,17 +25,17 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    if project && project.public
+    if @project && @project.public
       render json: {
         project_loaded: true,
-        project: project
+        project: @project
       }
-    elsif project && !project.public
+    elsif @project && !@project.public
       correct_user
-      if project
+      if @project
         render json: {
           project_loaded: true,
-          project: project
+          project: @project
         }
       else
         render json: {
@@ -65,10 +65,10 @@ class ProjectsController < ApplicationController
     end
 
     def set_project
-      project = Project.find(params[:id])
+      @project = Project.find(params[:id])
     end
 
     def correct_user
-      project = @current_user.projects.find_by(id: params[:id])
+      @project = @current_user.projects.find_by(id: params[:id])
     end
 end

@@ -2,9 +2,8 @@ import * as projectActionTypes from "../constants/ProjectConstants";
 
 export const projectInitialState = {
   projectLoaded: false,
-  title: "Sample Project",
-  owner: "Froyo101",
-  //sharedWith: ["jdoe123", "Froyo102"],
+  title: "Loading...",
+  owner: "Anon.",
   content: [
     {
       id: 0,
@@ -15,45 +14,6 @@ export const projectInitialState = {
           id: 0,
           title: "Sample Card 0",
           body: "Lorem ipsum et cetera et cetera",
-        },
-        {
-          id: 1,
-          title: "Sample Card 1",
-          body: "Lorem ipsum et cetera et cetera you get the idea",
-        },
-      ],
-    },
-    {
-      id: 1,
-      title: "Sample Bucket 1",
-      expanded: false,
-      cards: [
-        {
-          id: 2,
-          title: "Sample Card 0",
-          body: "Lorem ipsum et cetera et cetera",
-        },
-        {
-          id: 3,
-          title: "Sample Card 1",
-          body: "Lorem ipsum et cetera et cetera you get the idea",
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "Sample Bucket 2",
-      expanded: false,
-      cards: [
-        {
-          id: 4,
-          title: "Sample Card 0",
-          body: "Lorem ipsum et cetera et cetera",
-        },
-        {
-          id: 5,
-          title: "Sample Card 1",
-          body: "Lorem ipsum et cetera et cetera you get the idea",
         },
       ],
     },
@@ -73,12 +33,16 @@ const projectReducer = (state = projectInitialState, action) => {
     case projectActionTypes.LOAD_PROJECT_SUCCESS:
       const parsedContent = JSON.parse(action.project.content);
 
+      console.log(parsedContent);
+
       return Object.assign({}, newState, {
         projectLoaded: true,
         title: action.project.title,
         owner: action.project.owner,
-        content: action.project.content,
+        content: parsedContent,
       });
+    case projectActionTypes.CLEAR_PROJECT:
+      return Object.assign({}, projectInitialState);
     case projectActionTypes.ADD_CARD:
       const newContent = newState.content.map((bucket) => {
         if (bucket.id === action.data.bucketID) {

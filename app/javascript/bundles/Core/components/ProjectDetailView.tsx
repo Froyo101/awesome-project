@@ -47,20 +47,36 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
   const classes = useStyles();
   const { id } = useParams();
 
-  const fetchProject = () => {
-    axios
-      .get(`http://localhost:3000/projects/${id}`, { withCredentials: true })
-      .then((response) => {
-        if (response.data.project_loaded) {
-          actions.loadProjectSuccess(response.data.project);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  //Need unmount logic, i.e. reverting state to default
+  //Maybe remove auth and authactions from this if it only needs proj reducer access?
 
-  React.useEffect(() => fetchProject(), []);
+  React.useEffect(() => {
+    console.log("in project effect");
+
+    const fetchProject = () => {
+      axios
+        .get(`http://localhost:3000/projects/${id}`, { withCredentials: true })
+        .then((response) => {
+          if (response.data.project_loaded) {
+            actions.loadProjectSuccess(response.data.project);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
+    //Consider gating entire useEffect block with this logic? (as in at the highest level)
+    //Wait a sec if you can do that can't you just skip useEffect altogether
+    //And like, just use that as the oncomponentmount logic
+    //But then if you handle it that way, you may be waiting on fetching the project before any of the page can load
+    //Hrngh
+    if (!props.projectStore.projectLoaded) fetchProject();
+
+    /*return () => {
+      actions.clearProject();
+    }*/
+  }, []);
 
   const onDragEnd = (result) => {
     const { source, destination, draggableId, type } = result;
@@ -131,47 +147,46 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
     }
   };
 
-  if (props.projectStore.projectLoaded)
-    return (
-      <Container className={classes.root} component="main">
-        <CssBaseline />
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Paper className={classes.paper}>
-            <h1>
-              {props.projectStore.title} by {props.projectStore.owner}
-            </h1>
-            <p>Shared with: {props.projectStore.sharedWith.join(", ")}</p>
-            <Droppable
-              className={classes.bucketDroppable}
-              droppableId={"project-board"}
-              type="bucket"
-            >
-              {(provided) => (
-                <Box ref={provided.innerRef} {...provided.droppableProps}>
-                  {props.projectStore.content.map((bucket, index) => (
-                    <ProjectBucket
-                      key={"bucket-" + bucket.id}
-                      bucket={bucket}
-                      cards={bucket.cards}
-                      index={index}
-                    />
-                  ))}
-                  {provided.placeholder}
-                </Box>
-              )}
-            </Droppable>
-            <AddElementButton type="bucket" />
-          </Paper>
-        </DragDropContext>
-      </Container>
-    );
-  else
+  //if (props.projectStore.projectLoaded)
+  return (
+    <Container className={classes.root} component="main">
+      <CssBaseline />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Paper className={classes.paper}>
+          <h1>
+            {props.projectStore.title} by {props.projectStore.owner}
+          </h1>
+          <Droppable
+            className={classes.bucketDroppable}
+            droppableId={"project-board"}
+            type="bucket"
+          >
+            {(provided) => (
+              <Box ref={provided.innerRef} {...provided.droppableProps}>
+                {props.projectStore.content.map((bucket, index) => (
+                  <ProjectBucket
+                    key={"bucket-" + bucket.id}
+                    bucket={bucket}
+                    cards={bucket.cards}
+                    index={index}
+                  />
+                ))}
+                {provided.placeholder}
+              </Box>
+            )}
+          </Droppable>
+          <AddElementButton type="bucket" />
+        </Paper>
+      </DragDropContext>
+    </Container>
+  );
+  /*else
     return (
       <Container>
         <CssBaseline />
         <h1>Project Loading...</h1>
       </Container>
-    );
+    );*/
 };
 
 export default connect(mapStateToPropsProjectAuth)(ProjectDetailView);

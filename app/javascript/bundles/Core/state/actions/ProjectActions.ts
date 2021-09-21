@@ -13,6 +13,12 @@ export function loadProjectError() {
   };
 }
 
+export function clearProject() {
+  return {
+    type: projectActionTypes.CLEAR_PROJECT,
+  };
+}
+
 export function addBucket(data) {
   return {
     type: projectActionTypes.ADD_BUCKET,
