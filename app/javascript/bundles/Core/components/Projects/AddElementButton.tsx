@@ -55,6 +55,10 @@ const useStyles = makeStyles((theme: Theme) =>
     clickable: {
       cursor: "pointer",
     },
+    closeIcon: {
+      marginLeft: "8px",
+      cursor: "pointer",
+    },
   })
 );
 
@@ -127,7 +131,7 @@ const AddElementButton: React.FunctionComponent<any> = (props: any) => {
           >
             {"Add " + type}
           </Button>
-          <CloseIcon className={classes.leftSpacing} />
+          <CloseIcon className={classes.closeIcon} />
         </Box>
       </Box>
     );

@@ -3,9 +3,9 @@ import axios from "axios";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as AuthActions from "../state/actions/AuthActions";
+//import * as AuthActions from "../state/actions/AuthActions";
 import * as ProjectActions from "../state/actions/ProjectActions";
-import { mapStateToPropsProjectAuth } from "../state/StateToProps";
+import { mapStateToPropsProject } from "../state/StateToProps";
 import { useParams } from "react-router-dom";
 
 import Container from "@material-ui/core/Container";
@@ -40,10 +40,11 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
-  const actions = bindActionCreators(
-    { ...AuthActions, ...ProjectActions },
-    props.dispatch
-  );
+  
+  console.log("In PDV body");
+
+  const actions = bindActionCreators(ProjectActions, props.dispatch);
+
   const classes = useStyles();
   const { id } = useParams();
 
@@ -53,30 +54,31 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
   React.useEffect(() => {
     console.log("in project effect");
 
-    const fetchProject = () => {
+    /*const fetchProject = () => {
       axios
         .get(`http://localhost:3000/projects/${id}`, { withCredentials: true })
         .then((response) => {
           if (response.data.project_loaded) {
+            setProjectLoaded(true);
             actions.loadProjectSuccess(response.data.project);
           }
         })
         .catch((error) => {
           console.log(error);
         });
-    };
+    };*/
 
     //Consider gating entire useEffect block with this logic? (as in at the highest level)
     //Wait a sec if you can do that can't you just skip useEffect altogether
     //And like, just use that as the oncomponentmount logic
     //But then if you handle it that way, you may be waiting on fetching the project before any of the page can load
     //Hrngh
-    if (!props.projectStore.projectLoaded) fetchProject();
+    if (props.projectStore.projectId.toString() !== id.toString()) ProjectActions.loadProject(props.dispatch, id);
 
     /*return () => {
       actions.clearProject();
     }*/
-  }, []);
+  }, [id]);
 
   const onDragEnd = (result) => {
     const { source, destination, draggableId, type } = result;
@@ -189,4 +191,4 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
     );*/
 };
 
-export default connect(mapStateToPropsProjectAuth)(ProjectDetailView);
+export default connect(mapStateToPropsProject)(ProjectDetailView);

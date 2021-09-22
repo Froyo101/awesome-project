@@ -14,7 +14,9 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ProjectCard from "./ProjectCard";
 import AddElementButton from "./AddElementButton";
 import { Droppable, Draggable } from "react-beautiful-dnd";
-import { Box } from "@material-ui/core";
+import { Box, Button, TextField } from "@material-ui/core";
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,10 +37,23 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: theme.typography.pxToRem(15),
       fontWeight: theme.typography.fontWeightRegular,
     },
+    titleField: {
+      width: "100%",
+    },
     details: {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
+    },
+    editButton: {
+      backgroundColor: "#38a3a5",
+      color: "white",
+      margin: "8px",
+    },
+    deleteButton: {
+      backgroundColor: "#a53838",
+      color: "white",
+      margin: "8px",
     },
   })
 );
@@ -46,6 +61,22 @@ const useStyles = makeStyles((theme: Theme) =>
 const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
   const actions = bindActionCreators(projectActions, props.dispatch);
   const classes = useStyles();
+
+  const [editTitle, setEditTitle] = React.useState(false);
+  const [newTitle, setNewTitle] = React.useState("");
+
+  const handleEdit = () => {
+    setNewTitle(props.bucket.title);
+    setEditTitle(true);
+  };
+
+  const submitEdit = () => {
+    setEditTitle(false);
+  };
+
+  const handleDelete = () => {
+
+  };
 
   return (
     <Draggable draggableId={"bucket-" + props.bucket.id} index={props.index}>
@@ -63,10 +94,13 @@ const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
             aria-controls={"bucket-" + props.bucket.id + "-content"}
             id={"bucket-" + props.bucket.id + "-header"}
             onClick={() => actions.bucketExpansion(props.bucket.id)}
-          >
-            <Typography className={classes.heading}>
+          > 
+            {editTitle
+            ? <TextField className={classes.titleField} value={newTitle} autoFocus onBlur={submitEdit} onChange={(e) => setNewTitle(e.target.value)}/>
+            : <Typography className={classes.heading}>
               {props.bucket.title}
             </Typography>
+            }
           </AccordionSummary>
           <AccordionDetails className={classes.details}>
             <Droppable droppableId={"bucket-" + props.bucket.id + "-droppable"} type="card">
@@ -85,6 +119,14 @@ const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
             </Droppable>
             <br />
             <AddElementButton type="card" bucketID={props.bucket.id} />
+            <Box>
+              <Button className={classes.editButton} onClick={handleEdit} variant="contained">
+                Edit <EditIcon />
+              </Button>
+              <Button className={classes.deleteButton} onClick={handleDelete} variant="contained">
+                Delete <DeleteIcon />
+              </Button>
+            </Box>
           </AccordionDetails>
         </Accordion>
       )}

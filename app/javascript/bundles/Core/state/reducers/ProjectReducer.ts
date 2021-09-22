@@ -2,6 +2,7 @@ import * as projectActionTypes from "../constants/ProjectConstants";
 
 export const projectInitialState = {
   projectLoaded: false,
+  projectId: -1,
   title: "Loading...",
   owner: "Anon.",
   content: [
@@ -37,6 +38,7 @@ const projectReducer = (state = projectInitialState, action) => {
 
       return Object.assign({}, newState, {
         projectLoaded: true,
+        projectId: action.project.id,
         title: action.project.title,
         owner: action.project.owner,
         content: parsedContent,
