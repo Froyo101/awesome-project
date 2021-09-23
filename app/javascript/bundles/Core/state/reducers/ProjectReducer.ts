@@ -1,3 +1,4 @@
+import axios from "axios";
 import * as projectActionTypes from "../constants/ProjectConstants";
 
 export const projectInitialState = {
@@ -22,8 +23,22 @@ export const projectInitialState = {
 };
 
 //Need a function for retrieving last bucket/card id from a list that's loaded in
+//Scratch that, just make these a field of the state; indexData: {curBucketID: x, curCardID: y}
 let curBucketID = 2;
 let curCardID = 5;
+
+//Call this from reducer switch before actually applying state changes to page
+//If a positive response is returned, apply the state change (return modified newState)
+//Otherwise return the initial state as is, or perhaps initial state plus a custom error state mapped on top of it
+const patchContent = () => {
+  axios.patch("")
+    .then((response) => {
+      if (true) return true;
+    })
+    .catch((error) => {
+
+    });
+}
 
 const projectReducer = (state = projectInitialState, action) => {
   console.log("In project reducer");

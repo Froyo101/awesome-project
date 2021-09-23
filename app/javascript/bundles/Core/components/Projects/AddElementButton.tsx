@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "column",
       alignItems: "center",
       minWidth: "55vw",
-      margin: "8px auto 0px auto",
+      margin: "4px auto 4px auto",
       padding: "4px",
-      border: "3px dashed #E8E8E8",
-      borderRadius: "8px",
+      //border: "3px dashed #E8E8E8",
+      //borderRadius: "8px",
       cursor: "pointer",
     },
     innerButton: {
@@ -116,7 +116,7 @@ const AddElementButton: React.FunctionComponent<any> = (props: any) => {
         <Card className={classes.newCard}>
           <TextareaAutosize
             className={classes.textArea}
-            placeholder={"Enter some text for this " + type}
+            placeholder={"Enter a title for this " + type}
             autoFocus
             onBlur={closeNewElement}
             value={newElementText}

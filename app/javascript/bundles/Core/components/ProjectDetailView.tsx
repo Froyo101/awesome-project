@@ -20,7 +20,9 @@ import { Box } from "@material-ui/core";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: "100vw",
+      width: "100%",
+      padding: "0vw 10vw",
+      margin: "0px",
     },
     paper: {
       backgroundColor: "#E8E8E8",
@@ -28,7 +30,8 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(8),
       marginLeft: "auto",
       marginRight: "auto",
-      minWidth: "75vw",
+      minWidth: "80vw",
+      //width: "100%",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",

@@ -52,6 +52,25 @@ class ProjectsController < ApplicationController
   end
 
   def update
+    if @project
+      @project.update(content: params["project"]["content"])
+
+      if @project
+        render json: {
+          project_saved: true
+        }
+      else
+        render json: {
+          status: 500,
+          project_saved: false
+        }
+      end
+    else
+      render json: {
+        status: 404,
+        project_saved: false
+      }
+    end
   end
 
   def destroy
