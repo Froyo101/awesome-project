@@ -68,37 +68,43 @@ export function dndCard(content) {
   };
 }
 
-export function editCardTitle(data) {
+export function editCardTitle(bucketId, cardId, data) {
   return {
     type: projectActionTypes.EDIT_CARD_TITLE,
+    bucketId: bucketId,
+    cardId: cardId,
     data: data,
   };
 }
 
-export function editCardBody(data) {
+export function editCardBody(bucketId, cardId, data) {
   return {
     type: projectActionTypes.EDIT_CARD_BODY,
+    bucketId: bucketId,
+    cardId: cardId,
     data: data,
   };
 }
 
-export function deleteCard(data) {
+export function deleteCard(bucketId, cardId) {
   return {
     type: projectActionTypes.EDIT_CARD_TITLE,
-    data: data,
+    bucketId: bucketId,
+    cardId: cardId,
   };
 }
 
-export function editBucketTitle(data) {
+export function editBucketTitle(bucketId, data) {
   return {
     type: projectActionTypes.EDIT_BUCKET_TITLE,
+    bucketId: bucketId,
     data: data,
   };
 }
 
-export function deleteBucket(data) {
+export function deleteBucket(bucketId) {
   return {
     type: projectActionTypes.DELETE_BUCKET,
-    data: data,
+    bucketId: bucketId,
   };
 }

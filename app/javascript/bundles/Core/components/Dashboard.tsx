@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "16px",
       borderRadius: "4px",
     },
-
   })
 );
 
@@ -47,7 +46,7 @@ const Dashboard: React.FunctionComponent = (props: any) => {
           onClose={() => setOpenProjectForm(false)}
         >
           <Box className={classes.modal}>
-          <NewProjectForm />
+            <NewProjectForm />
           </Box>
         </Modal>
       </Container>

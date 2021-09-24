@@ -1,5 +1,10 @@
 import * as React from "react";
 
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import * as ProjectActions from "../../state/actions/ProjectActions"
+import { mapStateToPropsProject } from "../../state/StateToProps";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
@@ -54,6 +59,7 @@ const useStyles = makeStyles({
 });
 
 const ProjectCard: React.FunctionComponent<any> = (props: any) => {
+  const actions = bindActionCreators(ProjectActions, props.dispatch);
   const classes = useStyles();
 
   const [showActions, setShowActions] = React.useState(false);
@@ -70,6 +76,7 @@ const ProjectCard: React.FunctionComponent<any> = (props: any) => {
   };
 
   const submitNewTitle = () => {
+    actions.editCardTitle(props.bucketId, props.card.id, newTitle);
     setEditTitle(false);
     setNewTitle("");
   };
@@ -80,11 +87,14 @@ const ProjectCard: React.FunctionComponent<any> = (props: any) => {
   };
 
   const submitNewBody = () => {
+    actions.editCardBody(props.bucketId, props.card.id, newBody);
     setEditBody(false);
     setNewBody("");
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    actions.deleteCard(props.bucketId, props.card.id);
+  };
 
   return (
     <Draggable className={classes.draggable} draggableId={"card-" + props.card.id} index={props.index}>
@@ -171,4 +181,4 @@ const ProjectCard: React.FunctionComponent<any> = (props: any) => {
   );
 };
 
-export default ProjectCard;
+export default connect(mapStateToPropsProject)(ProjectCard);

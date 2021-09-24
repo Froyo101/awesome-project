@@ -9,7 +9,9 @@ class ProjectsController < ApplicationController
       title: params["project"]["title"],
       owner: @current_user.username,
       content: params["project"]["content"],
-      public: params["project"]["public"]
+      public: params["project"]["public"],
+      cur_bucket_id: params["project"]["indexData"]["curBucketId"],
+      cur_card_id: params["project"]["indexData"]["curCardId"]
     )
 
     if @project
@@ -53,7 +55,11 @@ class ProjectsController < ApplicationController
 
   def update
     if @project
-      @project.update(content: params["project"]["content"])
+      @project.update(
+        content: params["project"]["content"],
+        cur_bucket_id: params["project"]["indexData"]["curBucketId"],
+        cur_card_id: params["project"]["indexData"]["curCardId"]
+      )
 
       if @project
         render json: {

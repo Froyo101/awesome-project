@@ -74,11 +74,14 @@ const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
   };
 
   const submitEdit = () => {
+    actions.editBucketTitle(props.bucket.id, newTitle);
     setNewTitle("");
     setEditTitle(false);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    actions.deleteBucket(props.bucket.id);
+  };
 
   return (
     <Draggable draggableId={"bucket-" + props.bucket.id} index={props.index}>
@@ -123,6 +126,7 @@ const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
                     <ProjectCard
                       key={"card-" + card.id}
                       card={card}
+                      bucketId={props.bucket.id}
                       index={index}
                     />
                   ))}

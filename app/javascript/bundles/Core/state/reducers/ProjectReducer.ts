@@ -6,6 +6,10 @@ export const projectInitialState = {
   projectId: -1,
   title: "Loading...",
   owner: "Anon.",
+  indexData: {
+    curBucketId: 0,
+    curCardId: 0,
+  },
   content: [
     {
       id: 0,
@@ -22,27 +26,38 @@ export const projectInitialState = {
   ],
 };
 
-//Need a function for retrieving last bucket/card id from a list that's loaded in
-//Scratch that, just make these a field of the state; indexData: {curBucketID: x, curCardID: y}
-let curBucketID = 2;
-let curCardID = 5;
-
 //Call this from reducer switch before actually applying state changes to page
 //If a positive response is returned, apply the state change (return modified newState)
 //Otherwise return the initial state as is, or perhaps initial state plus a custom error state mapped on top of it
-const patchContent = () => {
-  axios.patch("")
+const patchContent = (projectId, newContent, indexData) => {
+  let updated = false;
+
+  axios
+    .patch(
+      `http://localhost:3000/projects/${projectId}`,
+      {
+        project: {
+          content: JSON.stringify(newContent),
+          indexData: indexData,
+        },
+      },
+      { withCredentials: true }
+    )
     .then((response) => {
-      if (true) return true;
+      if (response.data.project_saved) {
+        updated = true;
+      }
     })
     .catch((error) => {
-
+      console.log(error);
     });
-}
+
+  return updated;
+};
 
 const projectReducer = (state = projectInitialState, action) => {
   console.log("In project reducer");
-  
+
   let newState = { ...state };
 
   switch (action.type) {
@@ -51,25 +66,29 @@ const projectReducer = (state = projectInitialState, action) => {
 
       console.log(parsedContent);
 
-      return Object.assign({}, newState, {
+      return {
         projectLoaded: true,
         projectId: action.project.id,
         title: action.project.title,
         owner: action.project.owner,
+        indexData: {
+          curBucketId: action.project.cur_bucket_id,
+          curCardId: action.project.cur_card_id,
+        },
         content: parsedContent,
-      });
+      };
     case projectActionTypes.CLEAR_PROJECT:
       return Object.assign({}, projectInitialState);
     case projectActionTypes.ADD_CARD:
       const newContent = newState.content.map((bucket) => {
         if (bucket.id === action.data.bucketID) {
           const newCard = {
-            id: curCardID + 1,
+            id: newState.indexData.curCardId + 1,
             title: action.data.title,
             body: "Lorem ipsum...",
           };
 
-          curCardID++;
+          newState.indexData.curCardId++;
 
           return {
             ...bucket,
@@ -83,14 +102,152 @@ const projectReducer = (state = projectInitialState, action) => {
       return Object.assign({}, newState, { content: newContent });
     case projectActionTypes.ADD_BUCKET:
       const newBucket = {
-        id: curBucketID + 1,
+        id: newState.indexData.curBucketId + 1,
         title: action.data,
         expanded: true,
         cards: [],
       };
-      curBucketID++;
+      newState.indexData.curBucketId++;
       newState.content.push(newBucket);
       return newState;
+    case projectActionTypes.EDIT_CARD_TITLE:
+      const newContentCardTitle = newState.content.map((bucket) => {
+        if (bucket.id === action.bucketId) {
+          const newCards = bucket.cards.map((card) => {
+            if (card.id === action.cardId) {
+              card.title = action.data;
+            }
+
+            return card;
+          });
+
+          return {
+            ...bucket,
+            cards: newCards,
+          };
+        } else {
+          return bucket;
+        }
+      });
+
+      if (
+        patchContent(
+          newState.projectId,
+          newContentCardTitle,
+          newState.indexData
+        )
+      ) {
+        return Object.assign({}, newState, { content: newContentCardTitle });
+      } else {
+        return state;
+      }
+    case projectActionTypes.EDIT_CARD_BODY:
+      const newContentCardBody = newState.content.map((bucket) => {
+        if (bucket.id === action.bucketId) {
+          const newCards = bucket.cards.map((card) => {
+            if (card.id === action.cardId) {
+              card.body = action.data;
+            }
+
+            return card;
+          });
+
+          return {
+            ...bucket,
+            cards: newCards,
+          };
+        } else {
+          return bucket;
+        }
+      });
+
+      if (
+        patchContent(
+          newState.projectId,
+          newContentCardBody,
+          newState.indexData
+        )
+      ) {
+        return Object.assign({}, newState, { content: newContentCardBody });
+      } else {
+        return state;
+      }
+    case projectActionTypes.DELETE_CARD:
+      console.log("deletion reached");
+      
+      const newContentCardDeletion = newState.content.map((bucket) => {
+        if (bucket.id === action.bucketId) {
+          const newCards = bucket.cards.filter((card) => {
+            if (card.id === action.cardId) {
+              console.log("target reached");
+              return false;
+            } else {
+              return true;
+            }
+          })
+
+          console.log(newCards);
+
+          return {
+            ...bucket,
+            cards: newCards,
+          };
+        } else {
+          return bucket;
+        }
+      });
+
+      if (
+        patchContent(
+          newState.projectId,
+          newContentCardDeletion,
+          newState.indexData,
+        )
+      ) {
+        return Object.assign({}, newState, { content: newContentCardDeletion });
+      } else {
+        return state;
+      }
+    case projectActionTypes.EDIT_BUCKET_TITLE:
+      const newContentBucketTitle = newState.content.map((bucket) => {
+        if (bucket.id === action.bucketId) {
+          bucket.title = action.data;
+        }
+
+        return bucket;
+      });
+
+      if (
+        patchContent(
+          newState.projectId,
+          newContentBucketTitle,
+          newState.indexData,
+        )
+      ) {
+        return Object.assign({}, newState, { content: newContentBucketTitle });
+      } else {
+        return state;
+      }
+    case projectActionTypes.DELETE_BUCKET:
+      const newContentBucketDeletion = newState.content.filter((bucket) => {
+        if (bucket.id === action.bucketId) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+
+      if (
+        patchContent(
+          newState.projectId,
+          newContentBucketDeletion,
+          newState.indexData,
+        )
+      ) {
+        return Object.assign({}, newState, { content: newContentBucketDeletion });
+      } else {
+        return state;
+      }
     case projectActionTypes.BUCKET_EXPANSION:
       const newContentExpansion = newState.content.map((bucket) => {
         if (bucket.id === action.data) {
@@ -102,7 +259,9 @@ const projectReducer = (state = projectInitialState, action) => {
           return bucket;
         }
       });
-      
+
+      patchContent(newState.projectId, newContentExpansion, newState.indexData);
+
       return Object.assign({}, newState, { content: newContentExpansion });
     case projectActionTypes.DND_BUCKET:
       return Object.assign({}, newState, { content: action.content });
@@ -114,5 +273,3 @@ const projectReducer = (state = projectInitialState, action) => {
 };
 
 export default projectReducer;
-
-//UPDATE BUCKETS TO CONTAIN A HEADER FIELD TO PASS DOWN!

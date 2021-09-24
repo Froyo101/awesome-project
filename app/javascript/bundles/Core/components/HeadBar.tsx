@@ -124,8 +124,7 @@ const HeadBar: React.FunctionComponent<any> = (props: any) => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem>{props.authStore.user.username}</MenuItem>
                 <MenuItem onClick={handleLogout}>Sign out</MenuItem>
               </Menu>
             </div>

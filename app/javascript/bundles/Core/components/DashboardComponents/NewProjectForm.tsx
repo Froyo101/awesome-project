@@ -49,6 +49,10 @@ const NewProjectForm: React.FunctionComponent = (props: any) => {
         {
           project: {
             title: title,
+            indexData: {
+              curBucketId: 0,
+              curCardId: 0,
+            },
             public: publicProject,
             content: baseProject,
           },
