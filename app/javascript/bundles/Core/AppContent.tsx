@@ -14,6 +14,7 @@ import ProjectDetailView from './components/ProjectDetailView';
 import Signin from './components/Signin';
 import Signup from './components/Signup';
 import Test, {TestClass} from './components/Test';
+import ProjectContainer from './components/ProjectContainer';
 
 //const AppContent: React.FunctionComponent = (props: any) => {
 class AppContent extends React.Component<any, any> {
@@ -44,8 +45,11 @@ class AppContent extends React.Component<any, any> {
 
   //React.useEffect(() => checkAuthStatus());
 
+  initialCheck = false;
+
   componentDidMount() {
-    this.checkAuthStatus();
+    //In the future for sec may want to update this to be flagged whenever a new route is detected
+    if (!this.props.authStore.initialAuthCheck) this.checkAuthStatus();
   }
   
   render() {

@@ -4,6 +4,7 @@ export const authInitialState = {
   loggedIn: false,
   user: null,
   authError: null,
+  initialAuthCheck: false,
 };
 
 // TODO - Make an action interface!
@@ -30,6 +31,7 @@ const authReducer = (state = authInitialState, action: any) => {
         loggedIn: true,
         user: action.user,
         authError: null,
+        initialAuthCheck: true,
       });
     case authActionTypes.LOGOUT:
       return Object.assign({}, newState, {

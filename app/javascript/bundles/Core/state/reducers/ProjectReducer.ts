@@ -55,6 +55,9 @@ const patchContent = (projectId, newContent, indexData) => {
   return updated;
 };
 
+//need to apply post to add actions, alter bucket/card render flow to check for deleted state and return an empty,
+//hidden box/div/span if so
+
 const projectReducer = (state = projectInitialState, action) => {
   console.log("In project reducer");
 
@@ -90,16 +93,29 @@ const projectReducer = (state = projectInitialState, action) => {
 
           newState.indexData.curCardId++;
 
-          return {
+          /*return {
             ...bucket,
             cards: [...bucket.cards, newCard],
-          };
+          };*/
+
+          console.log("bucket before new card", bucket);
+          bucket.cards.push(newCard);
+          console.log("bucket after new card", bucket);
+          return bucket;
         } else {
           return bucket;
         }
       });
 
-      return Object.assign({}, newState, { content: newContent });
+      if (patchContent(
+        newState.projectId,
+        newContent,
+        newState.indexData,
+      )) {
+        return Object.assign({}, newState, { content: newContent });
+      } else {
+        return state;
+      }
     case projectActionTypes.ADD_BUCKET:
       const newBucket = {
         id: newState.indexData.curBucketId + 1,
@@ -109,7 +125,16 @@ const projectReducer = (state = projectInitialState, action) => {
       };
       newState.indexData.curBucketId++;
       newState.content.push(newBucket);
-      return newState;
+      
+      if (patchContent(
+        newState.projectId,
+        newState.content,
+        newState.indexData,
+      )) {
+        return newState;
+      } else {
+        return state;
+      }
     case projectActionTypes.EDIT_CARD_TITLE:
       const newContentCardTitle = newState.content.map((bucket) => {
         if (bucket.id === action.bucketId) {
@@ -173,7 +198,7 @@ const projectReducer = (state = projectInitialState, action) => {
         return state;
       }
     case projectActionTypes.DELETE_CARD:
-      console.log("deletion reached");
+      console.log("deletion reached in reducer");
       
       const newContentCardDeletion = newState.content.map((bucket) => {
         if (bucket.id === action.bucketId) {
