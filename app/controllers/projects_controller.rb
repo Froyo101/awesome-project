@@ -53,6 +53,21 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def show_all
+    @projects = @current_user.projects.order(updated_at: :desc)
+    if @projects
+      render json: {
+        projects_loaded: true,
+        projects: @projects
+      }
+    else
+      render json: {
+        status: 404,
+        projects_loaded: false,
+      }
+    end
+  end
+
   def update
     if @project
       @project.update(

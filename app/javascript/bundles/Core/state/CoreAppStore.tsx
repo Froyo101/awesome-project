@@ -2,9 +2,9 @@ import { applyMiddleware, compose, createStore, combineReducers } from '@reduxjs
 import { routerReducer } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
 // TODO - Add logger middleware!
-// TODO - Import reducers and initialStates from a reducers folder!
 import authReducer, { authInitialState } from './reducers/AuthReducer';
 import projectReducer, { projectInitialState } from './reducers/ProjectReducer';
+import dashboardReducer, { dashboardInitialState } from './reducers/DashboardReducer';
 import railsContextReducer, { railsContextInitialState } from './reducers/RailsContextReducer';
 
 // CONSIDER - Make interface for combinedState?
@@ -14,6 +14,7 @@ const coreAppStore = (props, railsContext) => {
   const combinedState = {
     authReducer: authInitialState,
     projectReducer: projectInitialState,
+    dashboardReducer: dashboardInitialState,
     railsContext,
     routing: null,
   };
@@ -21,6 +22,7 @@ const coreAppStore = (props, railsContext) => {
   const combinedReducer = combineReducers({
     authReducer,
     projectReducer,
+    dashboardReducer,
     railsContext: railsContextReducer,
     routing: routerReducer,
   });

@@ -87,7 +87,7 @@ const projectReducer = (state = projectInitialState, action) => {
           const newCard = {
             id: newState.indexData.curCardId + 1,
             title: action.data.title,
-            body: "Lorem ipsum...",
+            body: "Click actions to edit this card!",
           };
 
           newState.indexData.curCardId++;

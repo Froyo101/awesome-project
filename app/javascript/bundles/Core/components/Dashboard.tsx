@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { mapStateToPropsProjectAuth } from "../state/StateToProps";
 import { Redirect } from "react-router-dom";
 
-import { Container, CssBaseline, Button, Modal, Box } from "@material-ui/core";
+import { Container, CssBaseline, Button, Modal, Box, Paper, Grid } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import NewProjectForm from "./DashboardComponents/NewProjectForm";
 
@@ -31,6 +31,27 @@ const Dashboard: React.FunctionComponent = (props: any) => {
 
   const [openProjectForm, setOpenProjectForm] = React.useState(false);
 
+  //The question here will be whether to have continuous checks ("loading") or a one-time flag ("loaded")
+  //Continuous checks as commented here will likely not work due to re-mounting caused by accessing the store(s)
+  React.useEffect(() => {
+    const fetchProjects = async () => {
+      //Dispatch loading
+      await axios.get("http://localhost:3000/projects/all")
+        .then((response) => {
+          if (response.data.projects_loaded) {
+            console.log("Dashboard collection response", response);
+          }
+        })
+        .catch((error) => {
+          console.log("Dashboard collection error", error);
+        })
+      //Dispatch no longer loading
+    }
+
+    //Gate by if !loading?
+    fetchProjects();
+  }, [])
+
   if (props.authStore.loggedIn) {
     return (
       <Container>
@@ -40,6 +61,9 @@ const Dashboard: React.FunctionComponent = (props: any) => {
         <Button variant="contained" onClick={() => setOpenProjectForm(true)}>
           Create Project
         </Button>
+        <Paper>
+          {/*Grid here? Gate by loaded && <Grid>?*/}
+        </Paper>
         <Modal
           className={classes.root}
           open={openProjectForm}
