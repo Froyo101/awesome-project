@@ -43,39 +43,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
-  
-  console.log("In PDV body");
-
   const actions = bindActionCreators(ProjectActions, props.dispatch);
-
   const classes = useStyles();
-  const { id } = useParams();
 
-  //Need unmount logic, i.e. reverting state to default
-  //Maybe remove auth and authactions from this if it only needs proj reducer access?
+  const { id } = useParams();
 
   React.useEffect(() => {
     console.log("in project effect");
 
-    /*const fetchProject = () => {
-      axios
-        .get(`http://localhost:3000/projects/${id}`, { withCredentials: true })
-        .then((response) => {
-          if (response.data.project_loaded) {
-            setProjectLoaded(true);
-            actions.loadProjectSuccess(response.data.project);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };*/
-
-    //Consider gating entire useEffect block with this logic? (as in at the highest level)
-    //Wait a sec if you can do that can't you just skip useEffect altogether
-    //And like, just use that as the oncomponentmount logic
-    //But then if you handle it that way, you may be waiting on fetching the project before any of the page can load
-    //Hrngh
     if (props.projectStore.projectId.toString() !== id.toString()) ProjectActions.loadProject(props.dispatch, id);
 
     /*return () => {

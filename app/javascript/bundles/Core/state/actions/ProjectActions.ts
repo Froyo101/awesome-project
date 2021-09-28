@@ -88,7 +88,7 @@ export function editCardBody(bucketId, cardId, data) {
 
 export function deleteCard(bucketId, cardId) {
   return {
-    type: projectActionTypes.EDIT_CARD_TITLE,
+    type: projectActionTypes.DELETE_CARD,
     bucketId: bucketId,
     cardId: cardId,
   };

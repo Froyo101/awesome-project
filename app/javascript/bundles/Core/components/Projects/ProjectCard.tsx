@@ -93,9 +93,7 @@ const ProjectCard: React.FunctionComponent<any> = (props: any) => {
   };
 
   const handleDelete = () => {
-    console.log("In handleDelete before dispatch", props.card);
     actions.deleteCard(props.bucketId, props.card.id);
-    console.log("In handleDelete after dispatch?", props.card);
   };
 
   return (

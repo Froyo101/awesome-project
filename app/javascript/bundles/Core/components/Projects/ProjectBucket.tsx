@@ -68,13 +68,6 @@ const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
   const [editTitle, setEditTitle] = React.useState(false);
   const [newTitle, setNewTitle] = React.useState("");
 
-  //Won't this get refreshed every time the redux store is updated, remounting the component?
-  //Instead may want to access a list of valid bucket/id pairs to verify whether component can be displayed
-  //Upon mounting, it would check the list for itself, and if not found wouldn't display
-  //Would have to be careful to ensure that there wouldn't be a weird period between a new element being added
-  //and the element not being found on the list
-  const [deleted, setDeleted] = React.useState(false);
-
   const handleEdit = () => {
     setNewTitle(props.bucket.title);
     setEditTitle(true);
@@ -87,8 +80,7 @@ const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
   };
 
   const handleDelete = () => {
-    actions.deleteBucket(props.bucket.id);
-    setDeleted(true); 
+    actions.deleteBucket(props.bucket.id); 
   };
 
   return (

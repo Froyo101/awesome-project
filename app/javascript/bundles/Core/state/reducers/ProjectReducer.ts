@@ -29,10 +29,10 @@ export const projectInitialState = {
 //Call this from reducer switch before actually applying state changes to page
 //If a positive response is returned, apply the state change (return modified newState)
 //Otherwise return the initial state as is, or perhaps initial state plus a custom error state mapped on top of it
-const patchContent = (projectId, newContent, indexData) => {
+const patchContent = async (projectId, newContent, indexData) => {
   let updated = false;
 
-  axios
+  await axios
     .patch(
       `http://localhost:3000/projects/${projectId}`,
       {
@@ -46,17 +46,16 @@ const patchContent = (projectId, newContent, indexData) => {
     .then((response) => {
       if (response.data.project_saved) {
         updated = true;
+        console.log("Project saved and updated true w/in promise");
       }
     })
     .catch((error) => {
       console.log(error);
     });
 
+  console.log("Out of patch promise");
   return updated;
 };
-
-//need to apply post to add actions, alter bucket/card render flow to check for deleted state and return an empty,
-//hidden box/div/span if so
 
 const projectReducer = (state = projectInitialState, action) => {
   console.log("In project reducer");
@@ -98,20 +97,14 @@ const projectReducer = (state = projectInitialState, action) => {
             cards: [...bucket.cards, newCard],
           };*/
 
-          console.log("bucket before new card", bucket);
           bucket.cards.push(newCard);
-          console.log("bucket after new card", bucket);
           return bucket;
         } else {
           return bucket;
         }
       });
 
-      if (patchContent(
-        newState.projectId,
-        newContent,
-        newState.indexData,
-      )) {
+      if (patchContent(newState.projectId, newContent, newState.indexData)) {
         return Object.assign({}, newState, { content: newContent });
       } else {
         return state;
@@ -125,12 +118,10 @@ const projectReducer = (state = projectInitialState, action) => {
       };
       newState.indexData.curBucketId++;
       newState.content.push(newBucket);
-      
-      if (patchContent(
-        newState.projectId,
-        newState.content,
-        newState.indexData,
-      )) {
+
+      if (
+        patchContent(newState.projectId, newState.content, newState.indexData)
+      ) {
         return newState;
       } else {
         return state;
@@ -187,11 +178,7 @@ const projectReducer = (state = projectInitialState, action) => {
       });
 
       if (
-        patchContent(
-          newState.projectId,
-          newContentCardBody,
-          newState.indexData
-        )
+        patchContent(newState.projectId, newContentCardBody, newState.indexData)
       ) {
         return Object.assign({}, newState, { content: newContentCardBody });
       } else {
@@ -199,19 +186,20 @@ const projectReducer = (state = projectInitialState, action) => {
       }
     case projectActionTypes.DELETE_CARD:
       console.log("deletion reached in reducer");
-      
+
       const newContentCardDeletion = newState.content.map((bucket) => {
         if (bucket.id === action.bucketId) {
           const newCards = bucket.cards.filter((card) => {
+            console.log("Card being filtered", card);
             if (card.id === action.cardId) {
               console.log("target reached");
               return false;
             } else {
               return true;
             }
-          })
+          });
 
-          console.log(newCards);
+          console.log("newCards", newCards);
 
           return {
             ...bucket,
@@ -226,7 +214,7 @@ const projectReducer = (state = projectInitialState, action) => {
         patchContent(
           newState.projectId,
           newContentCardDeletion,
-          newState.indexData,
+          newState.indexData
         )
       ) {
         return Object.assign({}, newState, { content: newContentCardDeletion });
@@ -246,7 +234,7 @@ const projectReducer = (state = projectInitialState, action) => {
         patchContent(
           newState.projectId,
           newContentBucketTitle,
-          newState.indexData,
+          newState.indexData
         )
       ) {
         return Object.assign({}, newState, { content: newContentBucketTitle });
@@ -266,10 +254,12 @@ const projectReducer = (state = projectInitialState, action) => {
         patchContent(
           newState.projectId,
           newContentBucketDeletion,
-          newState.indexData,
+          newState.indexData
         )
       ) {
-        return Object.assign({}, newState, { content: newContentBucketDeletion });
+        return Object.assign({}, newState, {
+          content: newContentBucketDeletion,
+        });
       } else {
         return state;
       }
