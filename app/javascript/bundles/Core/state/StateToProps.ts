@@ -10,6 +10,19 @@ export function mapStateToPropsProject(state) {
   };
 }
 
+export function mapStateToPropsDashboard(state) {
+  return {
+    dashboardStore: state.dashboardReducer,
+  };
+}
+
+export function mapStateToPropsDashboardAuth(state) {
+  return {
+    authStore: state.authReducer,
+    dashboardStore: state.dashboardReducer,
+  };
+}
+
 export function mapStateToPropsProjectAuth(state) {
   return {
     authStore: state.authReducer,

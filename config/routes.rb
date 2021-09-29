@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   get "app(/*all)", to: "application#index"
 
   post 'projects', to: 'projects#create'
-  get 'projects/:id', to: 'projects#show'
   get 'projects/all', to: 'projects#show_all'
+  get 'projects/:id', to: 'projects#show'
   patch 'projects/:id', to: 'projects#update'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

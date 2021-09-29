@@ -6,3 +6,10 @@ export function loadProjectsSuccess(projects) {
     data: projects,
   };
 }
+
+export function changePage(pageNumber) {
+  return {
+    type: dashboardActionTypes.CHANGE_PAGE,
+    data: pageNumber,
+  };
+}
