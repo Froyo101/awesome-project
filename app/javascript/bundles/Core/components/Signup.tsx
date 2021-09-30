@@ -148,6 +148,7 @@ const Signup: React.FunctionComponent<any> = (props: any) => {
               <Grid item xs={12}>
                 <TextField
                   name="password"
+                  type="password"
                   variant="outlined"
                   required
                   fullWidth
@@ -160,6 +161,7 @@ const Signup: React.FunctionComponent<any> = (props: any) => {
               <Grid item xs={12}>
                 <TextField
                   name="passwordConfirmation"
+                  type="password"
                   variant="outlined"
                   required
                   fullWidth

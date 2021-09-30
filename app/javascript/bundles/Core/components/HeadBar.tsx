@@ -64,6 +64,7 @@ const HeadBar: React.FunctionComponent<any> = (props: any) => {
   };
 
   const handleLogout = () => {
+    setAnchorEl(null);
     axios
       .delete("http://localhost:3000/logout", { withCredentials: true })
       .then((response) => {

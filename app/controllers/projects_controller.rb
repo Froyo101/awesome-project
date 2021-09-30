@@ -95,6 +95,18 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
+    if @project
+      @project.destroy
+
+      render json: {
+        project_deleted: true
+      }
+    else
+      render json: {
+        status: 404,
+        project_deleted: false
+      }
+    end
   end
 
   private

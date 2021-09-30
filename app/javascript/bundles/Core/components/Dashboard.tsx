@@ -7,15 +7,33 @@ import * as DashboardActions from "../state/actions/DashboardActions";
 import { mapStateToPropsDashboardAuth } from "../state/StateToProps";
 import { Redirect } from "react-router-dom";
 
-import { Container, CssBaseline, Button, Modal, Box, Paper, Grid } from "@material-ui/core";
+import {
+  Container,
+  CssBaseline,
+  Button,
+  Modal,
+  Box,
+  Paper,
+  Grid,
+} from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from "@material-ui/icons/Add";
 import NewProjectForm from "./DashboardComponents/NewProjectForm";
+import ProjectTitleCard from "./DashboardComponents/ProjectTitleCard";
 import Pagination from "./DashboardComponents/Pagination";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {},
+    topBox: {
+      display: "flex",
+      justifyContent: "space-between",
+      margin: "0px",
+    },
+    addIcon: {
+      verticalAlign: "center",
+      marginLeft: "4px",
+      paddingBottom: "2px",
+    },
     projectsContainer: {
       backgroundColor: "#E8E8E8",
       display: "flex",
@@ -25,6 +43,8 @@ const useStyles = makeStyles((theme: Theme) =>
     createProjectButton: {
       color: "white",
       backgroundColor: "#57cc99",
+      verticalAlign: "center",
+      margin: "8px 0px",
     },
     modal: {
       backgroundColor: "#E8E8E8",
@@ -51,51 +71,67 @@ const Dashboard: React.FunctionComponent = (props: any) => {
   React.useEffect(() => {
     const fetchProjects = async () => {
       //Dispatch loading
-      await axios.get("http://localhost:3000/projects/all")
+      await axios
+        .get("http://localhost:3000/projects/all", { withCredentials: true })
         .then((response) => {
           if (response.data.projects_loaded) {
             console.log("Dashboard collection response", response);
-            actions.loadProjectsSuccess(response.data.projects); 
+            actions.loadProjectsSuccess(response.data.projects);
           }
         })
         .catch((error) => {
           console.log("Dashboard collection error", error);
-        })
+        });
       //Dispatch no longer loading
-    }
+    };
 
     //Gate by if !loading?
     if (!props.dashboardStore.projectsLoaded) fetchProjects();
   }, []);
 
-  const lastProjectIndex = props.dashboardStore.currentPage * props.dashboardStore.projectsPerPage;
-  const firstProjectIndex = lastProjectIndex - props.dashboardStore.projectsPerPage;
-  const page = props.dashboardStore.projects.slice(firstProjectIndex, lastProjectIndex);
+  const lastProjectIndex =
+    props.dashboardStore.currentPage * props.dashboardStore.projectsPerPage;
+  const firstProjectIndex =
+    lastProjectIndex - props.dashboardStore.projectsPerPage;
+  const page = props.dashboardStore.projects.slice(
+    firstProjectIndex,
+    lastProjectIndex
+  );
 
   if (props.authStore.loggedIn) {
     return (
       <Container>
         <CssBaseline />
-        <h1>Dashboard</h1>
-        <p>Welcome back, {user.username}</p>
-        <Button className={classes.createProjectButton} variant="contained" onClick={() => setOpenProjectForm(true)}>
-          Create Project
-          <AddIcon />
-        </Button>
-        {props.dashboardStore.projectsLoaded &&
-        <Paper className={classes.projectsContainer}>
-          <h2>Projects</h2>
-          {page.map((project, index) => (
-            <p style={{display: "block"}} key={index}>{project.title}</p>
-          ))}
-          <Pagination />
-        </Paper>
-        }
-        <Modal
-          className={classes.root}
-          open={openProjectForm}
-          onClose={() => setOpenProjectForm(false)}
-        >
+        <h2>Dashboard</h2>
+        <Box className={classes.topBox}>
+          <p> Welcome back, {user.username}</p>
+          <Button
+            className={classes.createProjectButton}
+            variant="contained"
+            onClick={() => setOpenProjectForm(true)}
+          >
+            Create Project
+            <AddIcon className={classes.addIcon} />
+          </Button>
+        </Box>
+        {props.dashboardStore.projectsLoaded && (
+          <Paper className={classes.projectsContainer}>
+            <h1>Current Projects</h1>
+            {page.map((project, index) => (
+              <ProjectTitleCard key={project.id} project={project} />
+            ))}
+            <Button
+              className={classes.createProjectButton}
+              variant="contained"
+              onClick={() => setOpenProjectForm(true)}
+            >
+              Create Project
+              <AddIcon className={classes.addIcon} />
+            </Button>
+            <Pagination />
+          </Paper>
+        )}
+        <Modal open={openProjectForm} onClose={() => setOpenProjectForm(false)}>
           <Box className={classes.modal}>
             <NewProjectForm />
           </Box>

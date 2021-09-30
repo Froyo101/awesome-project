@@ -13,3 +13,9 @@ export function changePage(pageNumber) {
     data: pageNumber,
   };
 }
+
+export function reloadDashboard() {
+  return {
+    type: dashboardActionTypes.RELOAD_DASHBOARD,
+  };
+}

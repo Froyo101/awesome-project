@@ -38,14 +38,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface myProps {
-  authStore: {
-    loggedIn: boolean;
-  };
-  attemptLogin: () => void;
-}
-
-//Need to properly type!
 const Signin: React.FunctionComponent<any> = (props: any) => {
   const actions = bindActionCreators(AuthActions, props.dispatch);
   const classes = useStyles();
@@ -83,9 +75,6 @@ const Signin: React.FunctionComponent<any> = (props: any) => {
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <h1>Testing</h1>
-        <h1>{"loggedIn " + props.authStore.loggedIn}</h1>
-        <h2>{"Email: " + email + " Password: " + password}</h2>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
@@ -112,6 +101,7 @@ const Signin: React.FunctionComponent<any> = (props: any) => {
               <Grid item xs={12}>
                 <TextField
                   name="password"
+                  type="password"
                   variant="outlined"
                   required
                   fullWidth
