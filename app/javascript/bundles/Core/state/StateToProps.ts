@@ -16,6 +16,12 @@ export function mapStateToPropsDashboard(state) {
   };
 }
 
+export function mapStateToPropsAlert(state) {
+  return {
+    alertStore: state.alertReducer,
+  };
+}
+
 export function mapStateToPropsDashboardAuth(state) {
   return {
     authStore: state.authReducer,

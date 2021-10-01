@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   delete :logout, to: "sessions#logout"
   get :logged_in, to: "sessions#logged_in"
   
-  get 'hello_world', to: 'hello_world#index'
   root to: 'application#index'
   get "app(/*all)", to: "application#index"
 
@@ -13,5 +12,8 @@ Rails.application.routes.draw do
   get 'projects/:id', to: 'projects#show'
   patch 'projects/:id', to: 'projects#update'
   delete 'projects/:id', to: 'projects#destroy'
+
+  get '*all', to: "application#index"
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

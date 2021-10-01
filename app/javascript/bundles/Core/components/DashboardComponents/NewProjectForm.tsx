@@ -2,6 +2,8 @@ import * as React from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
+import { useDispatch } from "react-redux";
+
 import { Button, Box, TextField, Checkbox } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
@@ -23,6 +25,7 @@ const NewProjectForm: React.FunctionComponent = (props: any) => {
   const [title, setTitle] = React.useState("");
   const [publicProject, setPublicProject] = React.useState(false);
 
+  const dispatch = useDispatch();
   let history = useHistory();
 
   const handleSubmit = (event) => {
@@ -37,7 +40,7 @@ const NewProjectForm: React.FunctionComponent = (props: any) => {
           {
             id: 0,
             title: "Initial Card",
-            body: "Hello world! Click me to start editing!",
+            body: "Hello world! Click actions to start editing!",
           },
         ],
       },
@@ -62,6 +65,7 @@ const NewProjectForm: React.FunctionComponent = (props: any) => {
       .then((response) => {
         console.log("project creation res", response);
         if (response.data.status === "created") {
+          dispatch({ type: "RELOAD_DASHBOARD" });
           history.push(`/app/project/${response.data.project.id}`);
         }
       })

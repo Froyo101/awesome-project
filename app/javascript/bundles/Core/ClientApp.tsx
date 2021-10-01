@@ -8,8 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import AppContent from './AppContent';
 
-// todo - do not repeat yourself!!! separate switch/route implemenation from client/server containers!
-// also, prob should properly type this at some point
+// TODO - do not repeat yourself!!! separate switch/route implemenation from client/server containers!
 const ClientApp: any = (_props, railsContext) => {
   const store = ReactOnRails.getStore('CoreAppStore', false);
 

@@ -1,0 +1,4 @@
+export const SHOW_ALERT = "SHOW_ALERT";
+export const HIDE_ALERT = "HIDE_ALERT";
+export const CHANGE_SEVERITY = "CHANGE_SEVERITY";
+export const CHANGE_MESSAGE = "CHANGE_MESSAGE";

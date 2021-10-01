@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "column",
       alignItems: "center",
     },
+    title: {
+      margin: "8px",
+    },
     bucketDroppable: {
       width: "100%",
     },
@@ -133,7 +136,7 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
       <CssBaseline />
       <DragDropContext onDragEnd={onDragEnd}>
         <Paper className={classes.paper}>
-          <h1>
+          <h1 className={classes.title}>
             {props.projectStore.title} by {props.projectStore.owner}
           </h1>
           <Droppable

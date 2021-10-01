@@ -22,6 +22,6 @@ const dashboardReducer = (state = dashboardInitialState, action) => {
     default:
       return state;
   }
-}
+};
 
 export default dashboardReducer;

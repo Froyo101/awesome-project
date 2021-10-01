@@ -34,10 +34,10 @@ class ProjectsController < ApplicationController
       }
     elsif @project && !@project.public
       correct_user
-      if @project
+      if @protected_project
         render json: {
           project_loaded: true,
-          project: @project
+          project: @protected_project
         }
       else
         render json: {
@@ -69,14 +69,14 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    if @project
-      @project.update(
+    if @protected_project
+      @protected_project.update(
         content: params["project"]["content"],
         cur_bucket_id: params["project"]["indexData"]["curBucketId"],
         cur_card_id: params["project"]["indexData"]["curCardId"]
       )
 
-      if @project
+      if @protected_project
         render json: {
           project_saved: true
         }
@@ -95,8 +95,8 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    if @project
-      @project.destroy
+    if @protected_project
+      @protected_project.destroy
 
       render json: {
         project_deleted: true
@@ -121,6 +121,6 @@ class ProjectsController < ApplicationController
     end
 
     def correct_user
-      @project = @current_user.projects.find_by(id: params[:id])
+      @protected_project = @current_user.projects.find_by(id: params[:id])
     end
 end

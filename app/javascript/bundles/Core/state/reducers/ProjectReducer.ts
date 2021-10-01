@@ -30,9 +30,10 @@ export const projectInitialState = {
 //If a positive response is returned, apply the state change (return modified newState)
 //Otherwise return the initial state as is, or perhaps initial state plus a custom error state mapped on top of it
 const patchContent = async (projectId, newContent, indexData) => {
-  let updated = false;
+  //let updated = false;
 
-  await axios
+  //This is stinky code, don't have promises w/in promises w/in....
+  const updated = await axios
     .patch(
       `http://localhost:3000/projects/${projectId}`,
       {
@@ -45,15 +46,21 @@ const patchContent = async (projectId, newContent, indexData) => {
     )
     .then((response) => {
       if (response.data.project_saved) {
-        updated = true;
         console.log("Project saved and updated true w/in promise");
+        return true;
+      } else {
+        throw("It ain't working chief");
+        //Can you just dispatch an error message from here? May just want to have it so it updates UI
+        //in either event but does go ahead and notify user when things aren't working out w/ the backend
       }
     })
     .catch((error) => {
       console.log(error);
+      return false;
     });
-
-  console.log("Out of patch promise");
+  
+  
+  console.log("Out of patch promise", updated);
   return updated;
 };
 
@@ -153,8 +160,10 @@ const projectReducer = (state = projectInitialState, action) => {
           newState.indexData
         )
       ) {
+        console.log("patchContent eval'd true");
         return Object.assign({}, newState, { content: newContentCardTitle });
       } else {
+        console.log("patchContent eval'd true");
         return state;
       }
     case projectActionTypes.EDIT_CARD_BODY:
@@ -279,9 +288,21 @@ const projectReducer = (state = projectInitialState, action) => {
 
       return Object.assign({}, newState, { content: newContentExpansion });
     case projectActionTypes.DND_BUCKET:
-      return Object.assign({}, newState, { content: action.content });
+      if (
+        patchContent(newState.projectId, action.content, newState.indexData)
+      ) {
+        return Object.assign({}, newState, { content: action.content });
+      } else {
+        return state;
+      }
     case projectActionTypes.DND_CARD:
-      return Object.assign({}, newState, { content: action.content });
+      if (
+        patchContent(newState.projectId, action.content, newState.indexData)
+      ) {
+        return Object.assign({}, newState, { content: action.content });
+      } else {
+        return state;
+      }
     default:
       return newState;
   }

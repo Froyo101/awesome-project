@@ -6,6 +6,7 @@ import authReducer, { authInitialState } from './reducers/AuthReducer';
 import projectReducer, { projectInitialState } from './reducers/ProjectReducer';
 import dashboardReducer, { dashboardInitialState } from './reducers/DashboardReducer';
 import railsContextReducer, { railsContextInitialState } from './reducers/RailsContextReducer';
+import alertReducer, { alertInitialState } from './reducers/AlertReducer';
 
 // CONSIDER - Make interface for combinedState?
 
@@ -15,6 +16,7 @@ const coreAppStore = (props, railsContext) => {
     authReducer: authInitialState,
     projectReducer: projectInitialState,
     dashboardReducer: dashboardInitialState,
+    alertReducer: alertInitialState,
     railsContext,
     routing: null,
   };
@@ -23,6 +25,7 @@ const coreAppStore = (props, railsContext) => {
     authReducer,
     projectReducer,
     dashboardReducer,
+    alertReducer,
     railsContext: railsContextReducer,
     routing: routerReducer,
   });

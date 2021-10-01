@@ -50,7 +50,7 @@ const ProjectTitleCard: React.FunctionComponent<any> = (props: any) => {
   let title = props.project.title;
 
   if (title.length > 64) {
-    title = title.splice(0, 62) + "...";
+    title = title.slice(0, 62) + "...";
   } else {
     title = title.padEnd(64, " ");
   }
