@@ -5,8 +5,9 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 //import * as AuthActions from "../state/actions/AuthActions";
 import * as ProjectActions from "../state/actions/ProjectActions";
+import * as AlertActions from "../state/actions/AlertActions";
 import { mapStateToPropsProject } from "../state/StateToProps";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
@@ -15,7 +16,8 @@ import { Theme, createStyles, makeStyles } from "@material-ui/core";
 import { CssBaseline } from "@material-ui/core";
 import AddElementButton from "./Projects/AddElementButton";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { Box } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
+import SaveIcon from "@material-ui/icons/Save";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,23 +44,45 @@ const useStyles = makeStyles((theme: Theme) =>
     bucketDroppable: {
       width: "100%",
     },
+    save: {
+      backgroundColor: "#57cc99",
+      color: "white",
+      marginBottom: "8px",
+    },
   })
 );
 
 const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
-  const actions = bindActionCreators(ProjectActions, props.dispatch);
+  const actions = bindActionCreators(
+    { ...ProjectActions, ...AlertActions },
+    props.dispatch
+  );
   const classes = useStyles();
 
   const { id } = useParams();
+  const history = useHistory();
+
+  const loadProject = () => {
+    axios
+      .get(`http://localhost:3000/projects/${id}`, { withCredentials: true })
+      .then((response) => {
+        if (response.data.project_loaded) {
+          actions.loadProjectSuccess(response.data.project);
+        } else {
+          history.push("/app/error");
+          actions.showAlert("warning", "Unable to find or display requested project - redirecting now");
+        }
+      })
+      .catch((error) => {
+        console.log("Project loading error", error);
+        history.push("/app/error");
+        actions.showAlert("error", "Something went wrong when fetching your request - redirecting now");
+      })
+  };
 
   React.useEffect(() => {
-    console.log("in project effect");
-
-    if (props.projectStore.projectId.toString() !== id.toString()) ProjectActions.loadProject(props.dispatch, id);
-
-    /*return () => {
-      actions.clearProject();
-    }*/
+    if (props.projectStore.projectId.toString() !== id.toString())
+      loadProject();
   }, [id]);
 
   const onDragEnd = (result) => {
@@ -79,8 +103,6 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
       const newBucketOrder = Array.from(props.projectStore.content);
       const currentBucket = newBucketOrder.splice(source.index, 1);
       newBucketOrder.splice(destination.index, 0, ...currentBucket);
-
-      //console.log(newBucketOrder);
 
       actions.dndBucket(newBucketOrder);
       return;
@@ -130,6 +152,39 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
     }
   };
 
+  const handleSave = () => {
+    const { projectId, content, indexData } = props.projectStore;
+
+    axios
+      .patch(
+        `http://localhost:3000/projects/${projectId}`,
+        {
+          project: {
+            content: JSON.stringify(content),
+            indexData: indexData,
+          },
+        },
+        { withCredentials: true }
+      )
+      .then((response) => {
+        if (response.data.project_saved) {
+          actions.showAlert("success", "Project successfully saved!");
+        } else {
+          actions.showAlert(
+            "warning",
+            "Project not saved - You may not have permission to edit this project"
+          );
+        }
+      })
+      .catch((error) => {
+        console.log("Project patch error", error);
+        actions.showAlert(
+          "error",
+          "Something went wrong trying to save your project - please try again"
+        );
+      });
+  };
+
   //if (props.projectStore.projectLoaded)
   return (
     <Container className={classes.root} component="main">
@@ -159,6 +214,13 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
             )}
           </Droppable>
           <AddElementButton type="bucket" />
+          <Button
+            className={classes.save}
+            variant="contained"
+            onClick={handleSave}
+          >
+            Save Project <SaveIcon />
+          </Button>
         </Paper>
       </DragDropContext>
     </Container>

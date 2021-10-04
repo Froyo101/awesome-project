@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       flexGrow: 1,
+      cursor: "pointer",
     },
   })
 );
@@ -61,6 +62,10 @@ const HeadBar: React.FunctionComponent<any> = (props: any) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleTitleClick = () => {
+    history.push("/app/home");
   };
 
   const handleLogout = () => {
@@ -83,7 +88,7 @@ const HeadBar: React.FunctionComponent<any> = (props: any) => {
     <div className={classes.root}>
       <AppBar position="static" color="transparent">
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6" className={classes.title} onClick={handleTitleClick}>
             AwesomeProject
           </Typography>
           {props.authStore.loggedIn == false && (

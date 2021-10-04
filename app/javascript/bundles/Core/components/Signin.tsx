@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { mapStateToPropsAuth } from "../state/StateToProps";
 import * as AuthActions from "../state/actions/AuthActions";
+import * as AlertActions from "../state/actions/AlertActions";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -35,11 +36,13 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    backgroundColor: "#38a3a5",
+    color: "white",
   },
 }));
 
 const Signin: React.FunctionComponent<any> = (props: any) => {
-  const actions = bindActionCreators(AuthActions, props.dispatch);
+  const actions = bindActionCreators({...AuthActions, ...AlertActions}, props.dispatch);
   const classes = useStyles();
 
   const [email, setEmail] = React.useState("");
@@ -62,12 +65,16 @@ const Signin: React.FunctionComponent<any> = (props: any) => {
         console.log("login res", response);
         if (response.data.status === "created") {
           actions.successfulLogin(response.data.user);
+          actions.showAlert("success", "You're now logged in!");
           props.history.push("/app/dashboard");
+        } else {
+          actions.showAlert("warning", "Login attempt failed");
         }
       })
       .catch((error) => {
         console.log("login error", error);
-        actions.failedLogin(error);
+        //actions.failedLogin(error);
+        actions.showAlert("error", "There was an error in processing your request - please refresh the page and try again");
       });
   };
 
@@ -116,7 +123,6 @@ const Signin: React.FunctionComponent<any> = (props: any) => {
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
               className={classes.submit}
             >
               Sign in!

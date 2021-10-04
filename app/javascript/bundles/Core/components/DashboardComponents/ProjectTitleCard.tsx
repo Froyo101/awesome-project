@@ -4,6 +4,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as DashboardActions from "../../state/actions/DashboardActions";
+import * as AlertActions from "../../state/actions/AlertActions";
 import { mapStateToPropsDashboard } from "../../state/StateToProps";
 import { useHistory } from "react-router-dom";
 
@@ -44,7 +45,7 @@ const useStyles = makeStyles({
 });
 
 const ProjectTitleCard: React.FunctionComponent<any> = (props: any) => {
-  const actions = bindActionCreators(DashboardActions, props.dispatch);
+  const actions = bindActionCreators({...DashboardActions, ...AlertActions}, props.dispatch);
   const classes = useStyles();
 
   let title = props.project.title;
@@ -63,17 +64,23 @@ const ProjectTitleCard: React.FunctionComponent<any> = (props: any) => {
 
   const [showActions, setShowActions] = React.useState(false);
 
-  const handleDelete = async () => {
-    await axios
+  const handleDelete = () => {
+    axios
       .delete(`http://localhost:3000/projects/${props.project.id}`, {
         withCredentials: true,
       })
       .then((response) => {
         console.log("Project deletion response", response);
-        actions.reloadDashboard();
+        if (response.data.project_deleted) {
+          actions.reloadDashboard();
+          actions.showAlert("success", "Project successfully deleted!");
+        } else {
+          actions.showAlert("warning", "Project not deleted - You may not have edit permissions for this project");
+        }
       })
       .catch((error) => {
         console.log("Project deletion error", error);
+        actions.showAlert("error", "Project not deleted - please refresh the page and try again");
       });
   };
 

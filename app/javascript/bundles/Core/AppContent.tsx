@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { mapStateToPropsAuth } from './state/StateToProps';
 import * as AuthActions from './state/actions/AuthActions';
+import * as AlertActions from "./state/actions/AlertActions";
 import { Switch, Route, withRouter } from 'react-router-dom';
 
 import HeadBar from './components/HeadBar';
@@ -24,10 +25,10 @@ class AppContent extends React.Component<any, any> {
     this.checkAuthStatus = this.checkAuthStatus.bind(this);
   }
 
-  actions = bindActionCreators(AuthActions, this.props.dispatch);
+  actions = bindActionCreators({...AuthActions, ...AlertActions}, this.props.dispatch);
 
-  checkAuthStatus = async () => {
-    await axios.get("http://localhost:3000/logged_in", { withCredentials: true })
+  checkAuthStatus = () => {
+    axios.get("http://localhost:3000/logged_in", { withCredentials: true })
     .then((response) => {
       console.log("authorized? response", response);
       if (response.data.logged_in && !this.props.authStore.loggedIn) {
@@ -35,11 +36,13 @@ class AppContent extends React.Component<any, any> {
       }
       else if (!response.data.logged_in && this.props.authStore.loggedIn) {
         this.actions.logout;
+        this.actions.showAlert("warning", "You have been logged out");
       }
     })
     .catch((error) => {
       console.log("authorized? error", error);
       this.actions.failedLogin(error);
+      this.actions.showAlert("error", "Unable to authorize user - Please refresh the page");
     });
   }
 
@@ -65,6 +68,7 @@ class AppContent extends React.Component<any, any> {
           <Route exact path="/app/project/:id" component={withRouter(ProjectDetailView)} />
           <Route exact path="/app/signin" component={withRouter(Signin)} />
           <Route exact path="/app/signup" component={withRouter(Signup)} />
+          <Route exact path="/app/error" component={withRouter(NotFound)} />
           <Route path="/" component={withRouter(NotFound)} />
         </Switch>
       </div>

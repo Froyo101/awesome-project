@@ -1,16 +1,15 @@
 import * as alertActionTypes from "../constants/AlertConstants";
 
 export const alertInitialState = {
-  active: true,
-  severity: "error",
-  message: "Testing, attention please",
+  active: false,
+  severity: null,
+  message: null,
 };
 
 const alertReducer = (state = alertInitialState, action) => {
   console.log("In alert reducer");
-  console.log("Alert state", state);
 
-  let newState = {...state};
+  //let newState = {...state};
 
   switch (action.type) {
     case alertActionTypes.SHOW_ALERT:

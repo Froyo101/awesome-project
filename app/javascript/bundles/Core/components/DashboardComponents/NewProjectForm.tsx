@@ -3,6 +3,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
+import * as AlertActions from "../../state/actions/AlertActions";
 
 import { Button, Box, TextField, Checkbox } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
@@ -16,6 +17,10 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: "center",
       margin: "8px",
     },
+    submit: {
+      backgroundColor: "#57cc99",
+      color: "white",
+    }
   })
 );
 
@@ -67,10 +72,13 @@ const NewProjectForm: React.FunctionComponent = (props: any) => {
         if (response.data.status === "created") {
           dispatch({ type: "RELOAD_DASHBOARD" });
           history.push(`/app/project/${response.data.project.id}`);
+        } else {
+          dispatch(AlertActions.showAlert("warning", "Unable to create project - try again"));
         }
       })
       .catch((error) => {
         console.log("project creation error", error);
+        dispatch(AlertActions.showAlert("error", "Something went wrong - please refresh the page and try again"));
       });
   };
 
@@ -95,7 +103,7 @@ const NewProjectForm: React.FunctionComponent = (props: any) => {
           onChange={(e) => setPublicProject(e.target.checked)}
         />
       </Box>
-      <Button type="submit" variant="contained" color="primary">
+      <Button className={classes.submit} type="submit" variant="contained">
         Create Project!
       </Button>
     </form>

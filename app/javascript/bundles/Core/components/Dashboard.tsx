@@ -4,6 +4,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as DashboardActions from "../state/actions/DashboardActions";
+import * as AlertActions from "../state/actions/AlertActions";
 import { mapStateToPropsDashboardAuth } from "../state/StateToProps";
 import { Redirect } from "react-router-dom";
 
@@ -14,7 +15,6 @@ import {
   Modal,
   Box,
   Paper,
-  Grid,
 } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
@@ -60,32 +60,30 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Dashboard: React.FunctionComponent = (props: any) => {
-  const actions = bindActionCreators(DashboardActions, props.dispatch);
+  const actions = bindActionCreators({...DashboardActions, ...AlertActions}, props.dispatch);
   const classes = useStyles();
   const user = props.authStore.user;
 
   const [openProjectForm, setOpenProjectForm] = React.useState(false);
 
-  //The question here will be whether to have continuous checks ("loading") or a one-time flag ("loaded")
-  //Continuous checks as commented here will likely not work due to re-mounting caused by accessing the store(s)
   React.useEffect(() => {
-    const fetchProjects = async () => {
-      //Dispatch loading
-      await axios
+    const fetchProjects = () => {
+      axios
         .get("http://localhost:3000/projects/all", { withCredentials: true })
         .then((response) => {
           if (response.data.projects_loaded) {
             console.log("Dashboard collection response", response);
             actions.loadProjectsSuccess(response.data.projects);
+          } else {
+            actions.showAlert("warning", "Unable to load projects");
           }
         })
         .catch((error) => {
           console.log("Dashboard collection error", error);
+          actions.showAlert("error", "Something went wrong loading projects - please refresh the page");
         });
-      //Dispatch no longer loading
     };
 
-    //Gate by if !loading?
     if (!props.dashboardStore.projectsLoaded) fetchProjects();
   }, []);
 
@@ -104,7 +102,7 @@ const Dashboard: React.FunctionComponent = (props: any) => {
         <CssBaseline />
         <h2>Dashboard</h2>
         <Box className={classes.topBox}>
-          <p> Welcome back, {user.username}</p>
+          <p> Welcome {user.username}!</p>
           <Button
             className={classes.createProjectButton}
             variant="contained"

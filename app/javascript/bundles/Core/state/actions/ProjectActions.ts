@@ -1,7 +1,7 @@
 import * as projectActionTypes from "../constants/ProjectConstants";
 import axios from "axios";
 
-export function loadProject(dispatch, projectId) {
+/*export function loadProject(dispatch, projectId) {
   axios
     .get(`http://localhost:3000/projects/${projectId}`, { withCredentials: true })
     .then((response) => {
@@ -10,9 +10,9 @@ export function loadProject(dispatch, projectId) {
       }
     })
     .catch((error) => {
-      console.log(error);
+      console.log("Project loading error", error);
     });
-}
+}*/
 
 export function loadProjectSuccess(project) {
   return {
