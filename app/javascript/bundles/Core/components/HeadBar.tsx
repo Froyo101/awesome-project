@@ -5,13 +5,13 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { mapStateToPropsAuth } from "../state/StateToProps";
 import * as AuthActions from "../state/actions/AuthActions";
+import * as AlertActions from "../state/actions/AlertActions";
 
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const HeadBar: React.FunctionComponent<any> = (props: any) => {
-  const actions = bindActionCreators(AuthActions, props.dispatch);
+  const actions = bindActionCreators({...AuthActions, ...AlertActions}, props.dispatch);
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -76,11 +76,14 @@ const HeadBar: React.FunctionComponent<any> = (props: any) => {
         console.log("Logout res", response);
         if (!response.data.logged_in) {
           actions.logout();
+          props.dispatch({ type: "FULL_RESET" });
+          actions.showAlert("success", "Successfully logged out!");
           history.push("/app/home");
         }
       })
       .catch((error) => {
         console.log("Logout error", error);
+        actions.showAlert("error", "Something went wrong - we were unable to log you out fully");
       });
   };
 

@@ -45,7 +45,7 @@ const NewProjectForm: React.FunctionComponent = (props: any) => {
           {
             id: 0,
             title: "Initial Card",
-            body: "Hello world! Click actions to start editing!",
+            body: "Click actions to start editing, and tap anywhere when finished to commit any changes.",
           },
         ],
       },
@@ -91,6 +91,7 @@ const NewProjectForm: React.FunctionComponent = (props: any) => {
         fullWidth
         id="title"
         label="Title"
+        autoFocus
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />

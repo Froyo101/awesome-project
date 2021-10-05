@@ -30,8 +30,16 @@ const coreAppStore = (props, railsContext) => {
     routing: routerReducer,
   });
 
+  const rootReducer = (state, action) => {
+    if (action.type === "FULL_RESET") {
+      return combinedReducer(undefined, action);
+    }
+    
+    return combinedReducer(state, action);
+  }
+
   const combinedCreateStore = compose(applyMiddleware(thunkMiddleware))(createStore);
-  return combinedCreateStore(combinedReducer, combinedState);
+  return combinedCreateStore(rootReducer, combinedState);
 }
 
 export default coreAppStore;

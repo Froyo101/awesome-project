@@ -98,7 +98,7 @@ const Dashboard: React.FunctionComponent = (props: any) => {
 
   if (props.authStore.loggedIn) {
     return (
-      <Container>
+      <Container style={{ marginBottom: "16px" }}>
         <CssBaseline />
         <h2>Dashboard</h2>
         <Box className={classes.topBox}>

@@ -95,6 +95,7 @@ const Signin: React.FunctionComponent<any> = (props: any) => {
                 <TextField
                   autoComplete="email"
                   name="email"
+                  type="email"
                   variant="outlined"
                   required
                   fullWidth

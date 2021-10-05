@@ -102,7 +102,6 @@ const Signup: React.FunctionComponent<any> = (props: any) => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoComplete="fname"
                   name="firstName"
                   variant="outlined"
                   required
@@ -116,7 +115,6 @@ const Signup: React.FunctionComponent<any> = (props: any) => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoComplete="lname"
                   name="lastName"
                   variant="outlined"
                   required
@@ -129,7 +127,6 @@ const Signup: React.FunctionComponent<any> = (props: any) => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  autoComplete="username"
                   name="username"
                   variant="outlined"
                   required
@@ -144,6 +141,7 @@ const Signup: React.FunctionComponent<any> = (props: any) => {
                 <TextField
                   autoComplete="email"
                   name="email"
+                  type="email"
                   variant="outlined"
                   required
                   fullWidth

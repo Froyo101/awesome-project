@@ -22,9 +22,9 @@ import SaveIcon from "@material-ui/icons/Save";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: "100%",
-      padding: "0vw 10vw",
-      margin: "0px",
+      //width: "100%",
+      //padding: "0vw 10vw",
+      //margin: "0px",
     },
     paper: {
       backgroundColor: "#E8E8E8",
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(8),
       marginLeft: "auto",
       marginRight: "auto",
-      minWidth: "80vw",
+      //minWidth: "80vw",
       //width: "100%",
       display: "flex",
       flexDirection: "column",

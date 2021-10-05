@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as ProjectActions from "../../state/actions/ProjectActions"
+import * as ProjectActions from "../../state/actions/ProjectActions";
 import { mapStateToPropsProject } from "../../state/StateToProps";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,7 +24,8 @@ const useStyles = makeStyles({
   },
   root: {
     //width: "100%",
-    minWidth: "60vw",
+    minWidth: "512px",
+    maxWidth: "720px",
     margin: "8px auto 8px auto",
     backgroundColor: "#E8E8E8",
   },
@@ -96,8 +97,18 @@ const ProjectCard: React.FunctionComponent<any> = (props: any) => {
     actions.deleteCard(props.bucketId, props.card.id);
   };
 
+  const handleEnter = (e) => {
+    if (editTitle && e.key === "Enter") {
+      submitNewTitle();
+    }
+  }
+
   return (
-    <Draggable className={classes.draggable} draggableId={"card-" + props.card.id} index={props.index}>
+    <Draggable
+      className={classes.draggable}
+      draggableId={"card-" + props.card.id}
+      index={props.index}
+    >
       {(provided) => (
         <Card
           className={classes.root}
@@ -111,6 +122,7 @@ const ProjectCard: React.FunctionComponent<any> = (props: any) => {
                 value={newTitle}
                 autoFocus
                 onBlur={submitNewTitle}
+                onKeyDown={handleEnter}
                 onChange={(e) => setNewTitle(e.target.value)}
               />
             ) : (
@@ -131,7 +143,12 @@ const ProjectCard: React.FunctionComponent<any> = (props: any) => {
                 onChange={(e) => setNewBody(e.target.value)}
               />
             ) : (
-              <Typography variant="body2" component="p" onDoubleClick={handleEditBody}>
+              <Typography
+                {...(editTitle ? provided.dragHandleProps : {})}
+                variant="body2"
+                component="p"
+                onDoubleClick={handleEditBody}
+              >
                 {props.card.body}
               </Typography>
             )}

@@ -28,7 +28,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     root: {
       //width: "100%",
-      minWidth: "70vw",
+      //minWidth: "70vw",
+      minWidth: "640px",
+      maxWidth: "900px",
       margin: "8px auto 4px auto",
       display: "block",
       //backgroundColor: "#345B63",
@@ -83,6 +85,18 @@ const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
     actions.deleteBucket(props.bucket.id); 
   };
 
+  const bucketExpansion = () => {
+    if (!editTitle) {
+      actions.bucketExpansion(props.bucket.id)
+    }
+  }
+
+  const handleEnter = (e) => {
+    if (editTitle && e.key === "Enter") {
+      submitEdit();
+    }
+  }
+
   return (
     <Draggable draggableId={"bucket-" + props.bucket.id} index={props.index}>
       {(provided) => (
@@ -98,7 +112,7 @@ const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
             expandIcon={<ExpandMoreIcon />}
             aria-controls={"bucket-" + props.bucket.id + "-content"}
             id={"bucket-" + props.bucket.id + "-header"}
-            onClick={() => actions.bucketExpansion(props.bucket.id)}
+            onClick={bucketExpansion}
           >
             {editTitle ? (
               <TextField
@@ -106,6 +120,7 @@ const ProjectBucket: React.FunctionComponent<any> = (props: any) => {
                 value={newTitle}
                 autoFocus
                 onBlur={submitEdit}
+                onKeyDown={handleEnter}
                 onChange={(e) => setNewTitle(e.target.value)}
               />
             ) : (
