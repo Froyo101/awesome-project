@@ -56,7 +56,7 @@ const Signup: React.FunctionComponent<any> = (props: any) => {
     event.preventDefault();
     axios
       .post(
-        "http://localhost:3000/registrations",
+        "https://awesome-project-jf.herokuapp.com/registrations",
         {
           user: {
             f_name: fname,

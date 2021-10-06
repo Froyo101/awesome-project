@@ -42,7 +42,7 @@ class AppContent extends React.Component<any, any> {
 
   checkAuthStatus = () => {
     axios
-      .get("http://localhost:3000/logged_in", { withCredentials: true })
+      .get("https://awesome-project-jf.herokuapp.com/logged_in", { withCredentials: true })
       .then((response) => {
         console.log("authorized? response", response);
         if (response.data.logged_in && !this.props.authStore.loggedIn) {

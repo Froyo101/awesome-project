@@ -64,7 +64,7 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
 
   const loadProject = () => {
     axios
-      .get(`http://localhost:3000/projects/${id}`, { withCredentials: true })
+      .get(`https://awesome-project-jf.herokuapp.com/projects/${id}`, { withCredentials: true })
       .then((response) => {
         if (response.data.project_loaded) {
           actions.loadProjectSuccess(response.data.project);
@@ -157,7 +157,7 @@ const ProjectDetailView: React.FunctionComponent<any> = (props: any) => {
 
     axios
       .patch(
-        `http://localhost:3000/projects/${projectId}`,
+        `https://awesome-project-jf.herokuapp.com/projects/${projectId}`,
         {
           project: {
             content: JSON.stringify(content),

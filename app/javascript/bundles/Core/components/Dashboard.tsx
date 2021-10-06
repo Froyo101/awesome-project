@@ -69,7 +69,7 @@ const Dashboard: React.FunctionComponent = (props: any) => {
   React.useEffect(() => {
     const fetchProjects = () => {
       axios
-        .get("http://localhost:3000/projects/all", { withCredentials: true })
+        .get("https://awesome-project-jf.herokuapp.com/projects/all", { withCredentials: true })
         .then((response) => {
           if (response.data.projects_loaded) {
             console.log("Dashboard collection response", response);

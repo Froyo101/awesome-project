@@ -71,7 +71,7 @@ const HeadBar: React.FunctionComponent<any> = (props: any) => {
   const handleLogout = () => {
     setAnchorEl(null);
     axios
-      .delete("http://localhost:3000/logout", { withCredentials: true })
+      .delete("https://awesome-project-jf.herokuapp.com/logout", { withCredentials: true })
       .then((response) => {
         console.log("Logout res", response);
         if (!response.data.logged_in) {

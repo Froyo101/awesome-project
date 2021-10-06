@@ -53,7 +53,7 @@ const NewProjectForm: React.FunctionComponent = (props: any) => {
 
     axios
       .post(
-        "http://localhost:3000/projects",
+        "https://awesome-project-jf.herokuapp.com/projects",
         {
           project: {
             title: title,

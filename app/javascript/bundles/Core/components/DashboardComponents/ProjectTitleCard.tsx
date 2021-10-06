@@ -66,7 +66,7 @@ const ProjectTitleCard: React.FunctionComponent<any> = (props: any) => {
 
   const handleDelete = () => {
     axios
-      .delete(`http://localhost:3000/projects/${props.project.id}`, {
+      .delete(`https://awesome-project-jf.herokuapp.com/projects/${props.project.id}`, {
         withCredentials: true,
       })
       .then((response) => {
