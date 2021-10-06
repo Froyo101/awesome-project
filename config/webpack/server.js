@@ -6,7 +6,7 @@ const merge = require('webpack-merge');
 
 const serverConfig = merge(environment.toWebpackConfig(), {
   target: 'web',
-  entry: './app/javascript/packs/core-app-server.jsx',
+  entry: './app/javascript/packs/server-bundle.js',
   output: {
     filename: 'server-bundle.js',
 

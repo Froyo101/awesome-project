@@ -1,9 +1,9 @@
 import ReactOnRails from 'react-on-rails';
-import ServerApp from '../bundles/Core/ServerApp';
+import ClientApp from '../bundles/Core/ClientApp';
 import CoreAppStore from '../bundles/Core/state/CoreAppStore'
 
 ReactOnRails.register({
-  ServerApp,
+  ClientApp,
 });
 
 ReactOnRails.registerStore({
