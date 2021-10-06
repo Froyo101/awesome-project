@@ -17,6 +17,7 @@ class RegistrationsController < ApplicationController
         user: user
       }
     else
+      reset_session
       render json: { status: 500 }
     end
   end

@@ -25,6 +25,7 @@ class SessionsController < ApplicationController
         user: @current_user
       }
     else
+      reset_session
       render json: {
         logged_in: false
       }

@@ -120,7 +120,7 @@ const Home: React.FunctionComponent<any> = (props: any) => {
         </ul>
       </Box>
       <Box className={classes.registrationBox}>
-        <h1>Make your project management suite serve your needs.</h1>
+        <h1>Get the project management suite that serves your needs.</h1>
         <h1><span className={classes.signUpToday} onClick={register}>Sign up today.</span></h1>
       </Box>
     </Container>
